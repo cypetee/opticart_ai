@@ -1,0 +1,25 @@
+{
+  "name": "OptiCart",
+  "short_name": "OptiCart",
+  "description": "AI-powered grocery shopping optimizer",
+  "start_url": "./screen1.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f6f9",
+  "theme_color": "#006a35",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

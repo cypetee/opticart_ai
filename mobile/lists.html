@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>OptiCart — My Lists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OptiCart">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { manrope: ['Manrope', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: "#006a35", "primary-dim": "#005c2d", "primary-container": "#75f39c",
+            "on-primary": "#cdffd4", secondary: "#006946", "secondary-container": "#72fbbd",
+            "on-secondary-container": "#005e3e", surface: "#f6f6f9",
+            "surface-container-lowest": "#ffffff", "surface-container-low": "#f0f0f3",
+            "surface-container": "#e7e8eb", "surface-container-high": "#e1e2e6",
+            "surface-container-highest": "#dbdde0", "on-surface": "#2d2f31",
+            "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
+            tertiary: "#006576", "tertiary-container": "#00dcff",
+            "error-container": "#ffdad6", "on-error-container": "#410002",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { min-height: max(884px, 100dvh); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+    .nav-tab-active { background-color: #72fbbd; color: #005e3e; border-radius: 1rem; }
+    .nav-tab-inactive { color: #5a5c5e; }
+    .item-checked { opacity: 0.45; }
+    .item-checked .item-name { text-decoration: line-through; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-inter overflow-x-hidden">
+
+  <!-- Background blobs -->
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -left-32 w-80 h-80 bg-primary-container/20 rounded-full blur-[120px]"></div>
+    <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-tertiary-container/10 rounded-full blur-[120px]"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="fixed top-0 inset-x-0 z-50 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10">
+    <div class="max-w-2xl mx-auto h-full px-6 flex items-center justify-between">
+      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+      <button onclick="showAddModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-colors duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:20px">add</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
+
+    <!-- Page heading -->
+    <div class="mb-6">
+      <h1 class="font-manrope font-bold text-2xl text-on-surface">My Lists</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Sunday, Apr 14 · 12 items</p>
+    </div>
+
+    <!-- Search / filter bar -->
+    <div class="relative mb-6">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size:18px">search</span>
+      <input type="text" placeholder="Search items..." class="w-full h-12 bg-surface-container-lowest rounded-xl pl-10 pr-4 text-sm text-on-surface placeholder-on-surface-variant/50 outline-none border border-outline-variant/20 focus:border-primary/40 transition-colors">
+    </div>
+
+    <!-- Progress summary -->
+    <div class="bg-primary-container/15 rounded-xl p-4 mb-6 flex items-center gap-4">
+      <div class="w-12 h-12 bg-primary-container/30 rounded-full flex items-center justify-center flex-shrink-0">
+        <span class="font-manrope font-bold text-primary text-sm">4/12</span>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-semibold text-on-surface">4 of 12 items checked</p>
+        <div class="mt-1.5 h-1.5 bg-surface-container rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full" style="width:33%"></div>
+        </div>
+      </div>
+      <span class="text-xs text-on-surface-variant font-medium">$48.20 est.</span>
+    </div>
+
+    <!-- Category: Produce -->
+    <div class="mb-5">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-base">🥬</span>
+        <h2 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wide">Produce</h2>
+        <span class="text-xs text-on-surface-variant ml-auto">3 items</span>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center flex-shrink-0 check-circle-ui bg-primary">
+            <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Avocados (3 pack)</span>
+          <span class="text-xs text-on-surface-variant">$2.39</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Baby Spinach (5oz)</span>
+          <span class="text-xs text-on-surface-variant">$3.49</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Cherry Tomatoes</span>
+          <span class="text-xs text-on-surface-variant">$2.99</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Dairy -->
+    <div class="mb-5">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-base">🥛</span>
+        <h2 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wide">Dairy</h2>
+        <span class="text-xs text-on-surface-variant ml-auto">4 items</span>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center flex-shrink-0 check-circle-ui bg-primary">
+            <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Organic Whole Milk (1 gal)</span>
+          <span class="text-xs text-on-surface-variant">$4.19</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center flex-shrink-0 check-circle-ui bg-primary">
+            <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Greek Yogurt Plain (32oz)</span>
+          <span class="text-xs text-on-surface-variant">$4.72</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Sharp Cheddar (8oz)</span>
+          <span class="text-xs text-on-surface-variant">$4.99</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Free-Range Eggs (12 ct)</span>
+          <span class="text-xs text-on-surface-variant">$6.37</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Bakery -->
+    <div class="mb-5">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-base">🍞</span>
+        <h2 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wide">Bakery</h2>
+        <span class="text-xs text-on-surface-variant ml-auto">2 items</span>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center flex-shrink-0 check-circle-ui bg-primary">
+            <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Sourdough Bread</span>
+          <span class="text-xs text-on-surface-variant">$3.59</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Whole Wheat Tortillas</span>
+          <span class="text-xs text-on-surface-variant">$3.29</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Pantry -->
+    <div class="mb-5">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-base">🥫</span>
+        <h2 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wide">Pantry</h2>
+        <span class="text-xs text-on-surface-variant ml-auto">3 items</span>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Olive Oil (Extra Virgin)</span>
+          <span class="text-xs text-on-surface-variant">$8.99</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Rolled Oats (42oz)</span>
+          <span class="text-xs text-on-surface-variant">$4.49</span>
+        </div>
+        <div class="list-item flex items-center gap-4 p-4" onclick="toggleItem(this)">
+          <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center flex-shrink-0 check-circle-ui">
+          </div>
+          <span class="item-name flex-1 text-sm text-on-surface">Almond Butter (16oz)</span>
+          <span class="text-xs text-on-surface-variant">$7.99</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add item row -->
+    <button onclick="showAddModal()" class="w-full flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-outline-variant/40 text-on-surface-variant hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-all duration-200 active:scale-[0.98]">
+      <span class="material-symbols-outlined" style="font-size:20px">add_circle</span>
+      <span class="text-sm font-medium">Add item to list</span>
+    </button>
+
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white rounded-t-[24px] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] px-8 pb-8 pt-4 z-50">
+    <div class="max-w-2xl mx-auto flex items-center justify-around">
+      <a href="lists.html" class="nav-tab-active flex items-center gap-1.5 px-4 py-2 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">checklist</span>
+        <span class="text-xs font-semibold">Lists</span>
+      </a>
+      <a href="deals.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">local_offer</span>
+        <span class="text-xs font-medium">Deals</span>
+      </a>
+      <a href="recipes.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">restaurant_menu</span>
+        <span class="text-xs font-medium">Recipes</span>
+      </a>
+      <a href="profile.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">person</span>
+        <span class="text-xs font-medium">Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Add Item Modal -->
+  <div id="add-modal" class="fixed inset-0 z-[100] flex items-end justify-center hidden" onclick="hideAddModal(event)">
+    <div class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-t-[24px] w-full max-w-2xl p-6 pb-10 shadow-2xl" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-5"></div>
+      <h3 class="font-manrope font-bold text-lg text-on-surface mb-4">Add Item</h3>
+      <div class="flex gap-3">
+        <input type="text" id="new-item-input" placeholder="e.g. Almond milk, 1 gallon" class="flex-1 h-12 bg-surface-container-highest rounded-xl px-4 text-sm text-on-surface placeholder-on-surface-variant/40 outline-none focus:ring-2 focus:ring-primary/30">
+        <button onclick="addItem()" class="h-12 px-5 bg-primary text-on-primary rounded-xl font-semibold text-sm hover:bg-primary-dim transition-colors active:scale-95">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleItem(row) {
+      const circle = row.querySelector('.check-circle-ui');
+      const isChecked = circle.classList.contains('bg-primary');
+      if (isChecked) {
+        circle.classList.remove('bg-primary', 'border-primary');
+        circle.classList.add('border-outline-variant');
+        circle.innerHTML = '';
+        row.classList.remove('item-checked');
+      } else {
+        circle.classList.add('bg-primary', 'border-primary');
+        circle.classList.remove('border-outline-variant');
+        circle.innerHTML = '<span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:\'FILL\' 1,\'wght\' 600,\'GRAD\' 0,\'opsz\' 24">check</span>';
+        row.classList.add('item-checked');
+      }
+    }
+    function showAddModal() { document.getElementById('add-modal').classList.remove('hidden'); }
+    function hideAddModal(e) { document.getElementById('add-modal').classList.add('hidden'); }
+    function addItem() {
+      const input = document.getElementById('new-item-input');
+      if (!input.value.trim()) return;
+      input.value = '';
+      hideAddModal();
+    }
+  </script>
+
+  <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
+</body>
+</html>
