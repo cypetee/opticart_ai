@@ -73,32 +73,32 @@
       <div class="flex items-center gap-4 mb-5">
         <!-- Avatar -->
         <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
-          <span class="font-manrope font-bold text-xl text-on-primary">JD</span>
+          <span class="font-manrope font-bold text-xl text-on-primary" id="avatar-initials">?</span>
         </div>
         <div class="flex-1 min-w-0">
-          <h2 class="font-manrope font-bold text-lg text-on-surface">Jane Doe</h2>
-          <p class="text-sm text-on-surface-variant">Organic &amp; Natural shopper</p>
+          <h2 class="font-manrope font-bold text-lg text-on-surface" id="profile-name">Your Profile</h2>
+          <p class="text-sm text-on-surface-variant" id="profile-pref">Loading...</p>
           <div class="flex items-center gap-1 mt-1">
             <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
-            <span class="text-xs text-primary font-semibold">AI profile: complete</span>
+            <span class="text-xs text-primary font-semibold" id="profile-status">AI profile: loading</span>
           </div>
         </div>
-        <button class="px-4 py-2 rounded-full border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary transition-all duration-200 active:scale-95">Edit</button>
+        <a href="screen1.html" class="px-4 py-2 rounded-full border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary transition-all duration-200 active:scale-95">Edit</a>
       </div>
 
       <!-- Stats row -->
       <div class="grid grid-cols-3 gap-3">
         <div class="bg-surface-container rounded-xl p-3 text-center">
-          <p class="font-manrope font-bold text-lg text-primary">$47</p>
-          <p class="text-xs text-on-surface-variant mt-0.5">Saved this month</p>
+          <p class="font-manrope font-bold text-lg text-primary" id="stat-age">—</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">Age</p>
         </div>
         <div class="bg-surface-container rounded-xl p-3 text-center">
-          <p class="font-manrope font-bold text-lg text-on-surface">12</p>
-          <p class="text-xs text-on-surface-variant mt-0.5">Deals redeemed</p>
+          <p class="font-manrope font-bold text-lg text-on-surface" id="stat-mode">—</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">Shop mode</p>
         </div>
         <div class="bg-surface-container rounded-xl p-3 text-center">
-          <p class="font-manrope font-bold text-lg text-on-surface">8</p>
-          <p class="text-xs text-on-surface-variant mt-0.5">Recipes tried</p>
+          <p class="font-manrope font-bold text-lg text-on-surface" id="stat-items">—</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">List items</p>
         </div>
       </div>
     </div>
@@ -108,35 +108,35 @@
       <h3 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wider mb-3">Shopping Preferences</h3>
       <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
 
-        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer" onclick="window.location.href='screen3.html'">
           <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-primary" style="font-size:18px">eco</span>
           </div>
           <div class="flex-1">
             <p class="text-sm font-semibold text-on-surface">Product Preference</p>
-            <p class="text-xs text-on-surface-variant">Organic &amp; Natural</p>
+            <p class="text-xs text-on-surface-variant" id="pref-pref">—</p>
           </div>
           <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
         </div>
 
-        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer" onclick="window.location.href='screen2.html'">
           <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-primary" style="font-size:18px">local_shipping</span>
           </div>
           <div class="flex-1">
             <p class="text-sm font-semibold text-on-surface">Shopping Mode</p>
-            <p class="text-xs text-on-surface-variant">Both / Multi-Modal</p>
+            <p class="text-xs text-on-surface-variant" id="pref-mode">—</p>
           </div>
           <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
         </div>
 
-        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer" onclick="window.location.href='screen4.html'">
           <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined text-primary" style="font-size:18px">payments</span>
+            <span class="material-symbols-outlined text-primary" style="font-size:18px">notes</span>
           </div>
           <div class="flex-1">
-            <p class="text-sm font-semibold text-on-surface">Weekly Budget</p>
-            <p class="text-xs text-on-surface-variant">$150 per week</p>
+            <p class="text-sm font-semibold text-on-surface">Personal Insights</p>
+            <p class="text-xs text-on-surface-variant" id="pref-insights">—</p>
           </div>
           <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
         </div>
@@ -255,6 +255,32 @@
       </div>
     </div>
 
+    <!-- Section: AI Settings -->
+    <div class="mb-5">
+      <h3 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wider mb-3">AI Settings</h3>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm p-4">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px">vpn_key</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">OpenRouter API Key</p>
+            <p class="text-xs text-on-surface-variant">Required for AI personalization</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <input
+            id="api-key-input"
+            type="password"
+            placeholder="sk-or-..."
+            class="flex-1 h-11 bg-surface-container-highest rounded-xl px-4 text-sm text-on-surface placeholder-on-surface-variant/40 outline-none focus:ring-2 focus:ring-primary/30"
+          >
+          <button onclick="saveApiKey()" class="h-11 px-4 bg-primary text-on-primary rounded-xl font-semibold text-sm hover:bg-primary-dim transition-colors active:scale-95">Save</button>
+        </div>
+        <p class="text-xs text-on-surface-variant mt-2" id="api-key-status">No key set — using rule-based filtering.</p>
+      </div>
+    </div>
+
     <!-- Redo onboarding -->
     <a href="screen1.html" class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl border border-outline-variant/30 text-sm font-semibold text-on-surface-variant hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-all duration-200 active:scale-[0.98]">
       <span class="material-symbols-outlined" style="font-size:18px">refresh</span>
@@ -285,7 +311,19 @@
     </div>
   </nav>
 
+  <script src="js/storage.js"></script>
   <script>
+    const PREF_LABELS = {
+      organic: 'Organic & Natural',
+      value: 'Best Value (Store Brands)',
+      premium: 'Brand Loyal (Premium)',
+    };
+    const MODE_LABELS = {
+      delivery: 'Online Delivery',
+      pickup: 'In-Store Pickup',
+      both: 'Both / Multi-Modal',
+    };
+
     function toggleSwitch(btn) {
       const isOn = btn.getAttribute('aria-checked') === 'true';
       btn.setAttribute('aria-checked', !isOn);
@@ -300,6 +338,50 @@
         thumb.style.transform = 'translateX(0)';
       }
     }
+
+    function saveApiKey() {
+      const val = document.getElementById('api-key-input').value.trim();
+      Storage.set({ apiKey: val });
+      document.getElementById('api-key-status').textContent = val
+        ? 'Key saved. AI personalization is active!'
+        : 'No key set — using rule-based filtering.';
+      document.getElementById('api-key-input').value = '';
+    }
+
+    function init() {
+      const p = Storage.get();
+      const pref = p.productPreference || null;
+      const mode = p.shoppingMode || null;
+      const initials = p.gender ? p.gender.substring(0, 1).toUpperCase() : '?';
+
+      document.getElementById('avatar-initials').textContent = initials + (p.age ? p.age : '');
+      document.getElementById('profile-name').textContent =
+        pref ? `${PREF_LABELS[pref] || pref} Shopper` : 'Complete your profile';
+      document.getElementById('profile-pref').textContent =
+        pref ? PREF_LABELS[pref] : 'No preference set';
+      document.getElementById('profile-status').textContent =
+        Storage.isOnboardingComplete() ? 'AI profile: complete' : 'Finish onboarding to activate AI';
+
+      document.getElementById('stat-age').textContent = p.age || '—';
+      document.getElementById('stat-mode').textContent = mode
+        ? (mode === 'delivery' ? '🚚' : mode === 'pickup' ? '🏪' : '🔀')
+        : '—';
+      document.getElementById('stat-items').textContent =
+        JSON.parse(localStorage.getItem('opticart_list') || '[]').length || '—';
+
+      document.getElementById('pref-pref').textContent = PREF_LABELS[pref] || 'Not set';
+      document.getElementById('pref-mode').textContent = MODE_LABELS[mode] || 'Not set';
+      document.getElementById('pref-insights').textContent =
+        p.insights ? (p.insights.length > 50 ? p.insights.slice(0, 50) + '…' : p.insights) : 'None set';
+
+      const apiKey = Storage.getApiKey();
+      if (apiKey) {
+        document.getElementById('api-key-input').placeholder = '••••••••••••••••••• (saved)';
+        document.getElementById('api-key-status').textContent = 'Key saved. AI personalization is active!';
+      }
+    }
+
+    init();
   </script>
 
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
