@@ -87,6 +87,7 @@
         <label class="block text-xs font-semibold tracking-widest uppercase text-on-surface-variant mb-2.5">Age</label>
         <div class="input-focus-line">
           <input
+            id="age-input"
             type="number"
             placeholder="Enter your age"
             min="1" max="120"
@@ -135,14 +136,26 @@
         <span class="material-symbols-outlined" style="font-size:18px">chevron_left</span>
         Previous
       </button>
-      <a href="screen2.html" class="flex items-center gap-2 px-7 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/15 transition-all duration-200 active:scale-[0.98]">
+      <button onclick="goNext()" class="flex items-center gap-2 px-7 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/15 transition-all duration-200 active:scale-[0.98]">
         Next
         <span class="material-symbols-outlined" style="font-size:18px">chevron_right</span>
-      </a>
+      </button>
     </div>
   </nav>
 
+  <script src="js/storage.js"></script>
   <script>
+    // Pre-fill from storage
+    (function() {
+      const p = Storage.get();
+      if (p.age) document.getElementById('age-input').value = p.age;
+      if (p.gender) {
+        document.querySelectorAll('#gender-chips .chip').forEach(c => {
+          if (c.textContent.trim() === p.gender) selectChip(c);
+        });
+      }
+    })();
+
     function selectChip(el) {
       document.querySelectorAll('#gender-chips .chip').forEach(c => {
         c.classList.remove('chip-selected', 'rounded-full', 'bg-secondary-container', 'text-on-secondary-container', 'font-semibold');
@@ -150,6 +163,14 @@
       });
       el.classList.remove('chip-unselected', 'rounded-xl', 'bg-surface-container-lowest', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
       el.classList.add('chip-selected', 'rounded-full', 'bg-secondary-container', 'text-on-secondary-container', 'font-semibold');
+    }
+
+    function goNext() {
+      const age = document.getElementById('age-input').value;
+      const selectedChip = document.querySelector('#gender-chips .chip-selected');
+      const gender = selectedChip ? selectedChip.textContent.trim() : null;
+      Storage.set({ age: age ? parseInt(age) : null, gender });
+      window.location.href = 'screen2.html';
     }
   </script>
 

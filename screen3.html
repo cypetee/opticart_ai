@@ -83,7 +83,7 @@
     <div class="space-y-3 mb-5" id="pref-list">
 
       <!-- Organic & Natural (pre-selected) -->
-      <div class="radio-card selected p-5 rounded-xl bg-surface-container-lowest border-2 border-primary shadow-sm cursor-pointer" onclick="selectPref(this)">
+      <div data-pref="organic" class="radio-card selected p-5 rounded-xl bg-surface-container-lowest border-2 border-primary shadow-sm cursor-pointer" onclick="selectPref(this)">
         <div class="flex items-center gap-4">
           <div class="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-primary" style="font-size:22px">eco</span>
@@ -102,7 +102,7 @@
       </div>
 
       <!-- Best Value -->
-      <div class="radio-card p-5 rounded-xl bg-surface-container-lowest border-2 border-outline-variant/20 shadow-sm cursor-pointer hover:border-primary/30 hover:shadow-md transition-all duration-200" onclick="selectPref(this)">
+      <div data-pref="value" class="radio-card p-5 rounded-xl bg-surface-container-lowest border-2 border-outline-variant/20 shadow-sm cursor-pointer hover:border-primary/30 hover:shadow-md transition-all duration-200" onclick="selectPref(this)">
         <div class="flex items-center gap-4">
           <div class="w-11 h-11 bg-surface-container rounded-full flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-on-surface-variant" style="font-size:22px">sell</span>
@@ -121,7 +121,7 @@
       </div>
 
       <!-- Brand Loyal -->
-      <div class="radio-card p-5 rounded-xl bg-surface-container-lowest border-2 border-outline-variant/20 shadow-sm cursor-pointer hover:border-primary/30 hover:shadow-md transition-all duration-200" onclick="selectPref(this)">
+      <div data-pref="premium" class="radio-card p-5 rounded-xl bg-surface-container-lowest border-2 border-outline-variant/20 shadow-sm cursor-pointer hover:border-primary/30 hover:shadow-md transition-all duration-200" onclick="selectPref(this)">
         <div class="flex items-center gap-4">
           <div class="w-11 h-11 bg-surface-container rounded-full flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-on-surface-variant" style="font-size:22px">star</span>
@@ -200,14 +200,28 @@
         <span class="material-symbols-outlined" style="font-size:18px">chevron_left</span>
         Previous
       </a>
-      <a href="screen4.html" class="flex items-center gap-2 px-7 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/15 transition-all duration-200 active:scale-[0.98]">
+      <button onclick="goNext()" class="flex items-center gap-2 px-7 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/15 transition-all duration-200 active:scale-[0.98]">
         Next
         <span class="material-symbols-outlined" style="font-size:18px">chevron_right</span>
-      </a>
+      </button>
     </div>
   </nav>
 
+  <script src="js/storage.js"></script>
   <script>
+    // Pre-fill from storage
+    (function() {
+      const pref = Storage.getProductPreference();
+      const card = document.querySelector(`[data-pref="${pref}"]`);
+      if (card) selectPref(card);
+
+      const fallback = Storage.getOrganicFallback();
+      if (fallback) {
+        const tog = document.getElementById('organic-toggle');
+        if (tog && tog.getAttribute('aria-checked') === 'false') toggleSwitch(tog);
+      }
+    })();
+
     function selectPref(el) {
       document.querySelectorAll('#pref-list .radio-card').forEach(c => {
         c.classList.remove('selected', 'border-primary');
@@ -245,6 +259,15 @@
         btn.classList.remove('bg-primary');
         thumb.style.transform = 'translateX(0)';
       }
+    }
+
+    function goNext() {
+      const selected = document.querySelector('#pref-list .radio-card.selected');
+      const productPreference = selected ? selected.dataset.pref : 'organic';
+      const toggle = document.getElementById('organic-toggle');
+      const organicFallback = toggle ? toggle.getAttribute('aria-checked') === 'true' : false;
+      Storage.set({ productPreference, organicFallback });
+      window.location.href = 'screen4.html';
     }
   </script>
 

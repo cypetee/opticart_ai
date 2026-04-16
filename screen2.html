@@ -90,7 +90,7 @@
     <div class="grid grid-cols-12 gap-4" id="mode-grid">
 
       <!-- Online Delivery -->
-      <div class="col-span-6 mode-card bg-surface-container-lowest rounded-xl p-5 border-2 border-outline-variant/20 hover:border-primary/30 hover:shadow-md cursor-pointer" onclick="selectMode(this)">
+      <div data-mode="delivery" class="col-span-6 mode-card bg-surface-container-lowest rounded-xl p-5 border-2 border-outline-variant/20 hover:border-primary/30 hover:shadow-md cursor-pointer" onclick="selectMode(this)">
         <div class="w-11 h-11 bg-secondary-container rounded-xl flex items-center justify-center mb-4">
           <span class="material-symbols-outlined text-on-secondary-container" style="font-size:22px">local_shipping</span>
         </div>
@@ -102,7 +102,7 @@
       </div>
 
       <!-- In-Store Pickup -->
-      <div class="col-span-6 mode-card bg-surface-container-lowest rounded-xl p-5 border-2 border-outline-variant/20 hover:border-primary/30 hover:shadow-md cursor-pointer" onclick="selectMode(this)">
+      <div data-mode="pickup" class="col-span-6 mode-card bg-surface-container-lowest rounded-xl p-5 border-2 border-outline-variant/20 hover:border-primary/30 hover:shadow-md cursor-pointer" onclick="selectMode(this)">
         <div class="w-11 h-11 bg-secondary-container rounded-xl flex items-center justify-center mb-4">
           <span class="material-symbols-outlined text-on-secondary-container" style="font-size:22px">storefront</span>
         </div>
@@ -114,7 +114,7 @@
       </div>
 
       <!-- Both / Multi-Modal (featured) -->
-      <div class="col-span-12 mode-card bg-surface-container-lowest rounded-xl border-2 border-primary/20 hover:border-primary/50 hover:shadow-lg cursor-pointer overflow-hidden" onclick="selectMode(this)">
+      <div data-mode="both" class="col-span-12 mode-card bg-surface-container-lowest rounded-xl border-2 border-primary/20 hover:border-primary/50 hover:shadow-lg cursor-pointer overflow-hidden" onclick="selectMode(this)">
         <div class="flex">
           <!-- Left food image -->
           <div class="w-1/3 relative bg-surface-container food-img flex-shrink-0" style="min-height:140px">
@@ -148,14 +148,24 @@
         <span class="material-symbols-outlined" style="font-size:18px">chevron_left</span>
         Previous
       </a>
-      <a href="screen3.html" class="flex items-center gap-2 px-7 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/15 transition-all duration-200 active:scale-[0.98]">
+      <button onclick="goNext()" class="flex items-center gap-2 px-7 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/15 transition-all duration-200 active:scale-[0.98]">
         Next
         <span class="material-symbols-outlined" style="font-size:18px">chevron_right</span>
-      </a>
+      </button>
     </div>
   </nav>
 
+  <script src="js/storage.js"></script>
   <script>
+    // Pre-select from storage
+    (function() {
+      const saved = Storage.getShoppingMode();
+      if (saved) {
+        const card = document.querySelector(`[data-mode="${saved}"]`);
+        if (card) selectMode(card);
+      }
+    })();
+
     function selectMode(el) {
       document.querySelectorAll('.mode-card').forEach(c => {
         c.classList.remove('selected');
@@ -163,6 +173,13 @@
       });
       el.classList.add('selected');
       el.querySelectorAll('.check-icon').forEach(i => i.classList.remove('hidden'));
+    }
+
+    function goNext() {
+      const selected = document.querySelector('.mode-card.selected');
+      const shoppingMode = selected ? selected.dataset.mode : null;
+      Storage.set({ shoppingMode });
+      window.location.href = 'screen3.html';
     }
   </script>
 

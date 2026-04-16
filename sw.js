@@ -1,4 +1,4 @@
-const CACHE = 'opticart-v1';
+const CACHE = 'opticart-v2';
 const ASSETS = [
   './screen1.html',
   './screen2.html',
@@ -11,6 +11,9 @@ const ASSETS = [
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-maskable.svg',
+  './data/grocery.js',
+  './js/storage.js',
+  './js/ai-filter.js',
 ];
 
 // Install: cache all app shell assets
