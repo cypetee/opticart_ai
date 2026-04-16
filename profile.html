@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>OptiCart — Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OptiCart">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { manrope: ['Manrope', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: "#006a35", "primary-dim": "#005c2d", "primary-container": "#75f39c",
+            "on-primary": "#cdffd4", secondary: "#006946", "secondary-container": "#72fbbd",
+            "on-secondary-container": "#005e3e", surface: "#f6f6f9",
+            "surface-container-lowest": "#ffffff", "surface-container-low": "#f0f0f3",
+            "surface-container": "#e7e8eb", "surface-container-high": "#e1e2e6",
+            "surface-container-highest": "#dbdde0", "on-surface": "#2d2f31",
+            "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
+            tertiary: "#006576", "tertiary-container": "#00dcff",
+            "error-container": "#ffdad6", "on-error-container": "#410002",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { min-height: max(884px, 100dvh); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+    .nav-tab-active { background-color: #72fbbd; color: #005e3e; border-radius: 1rem; }
+    .nav-tab-inactive { color: #5a5c5e; }
+    .settings-row { transition: background-color 0.15s ease; }
+    .settings-row:active { background-color: #e7e8eb; transform: scale(0.99); }
+    .toggle-track { transition: background-color 0.25s ease; }
+    .toggle-thumb { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-inter overflow-x-hidden">
+
+  <!-- Background blobs -->
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-80 h-80 bg-primary-container/20 rounded-full blur-[120px]"></div>
+    <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-secondary-container/15 rounded-full blur-[120px]"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="fixed top-0 inset-x-0 z-50 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10">
+    <div class="max-w-2xl mx-auto h-full px-6 flex items-center justify-between">
+      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors duration-200 active:scale-95">
+        <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
+
+    <!-- Profile card -->
+    <div class="bg-surface-container-lowest rounded-[24px] p-6 mb-6 shadow-sm">
+      <div class="flex items-center gap-4 mb-5">
+        <!-- Avatar -->
+        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
+          <span class="font-manrope font-bold text-xl text-on-primary">JD</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-manrope font-bold text-lg text-on-surface">Jane Doe</h2>
+          <p class="text-sm text-on-surface-variant">Organic &amp; Natural shopper</p>
+          <div class="flex items-center gap-1 mt-1">
+            <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+            <span class="text-xs text-primary font-semibold">AI profile: complete</span>
+          </div>
+        </div>
+        <button class="px-4 py-2 rounded-full border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary transition-all duration-200 active:scale-95">Edit</button>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-surface-container rounded-xl p-3 text-center">
+          <p class="font-manrope font-bold text-lg text-primary">$47</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">Saved this month</p>
+        </div>
+        <div class="bg-surface-container rounded-xl p-3 text-center">
+          <p class="font-manrope font-bold text-lg text-on-surface">12</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">Deals redeemed</p>
+        </div>
+        <div class="bg-surface-container rounded-xl p-3 text-center">
+          <p class="font-manrope font-bold text-lg text-on-surface">8</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">Recipes tried</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Preferences -->
+    <div class="mb-5">
+      <h3 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wider mb-3">Shopping Preferences</h3>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px">eco</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Product Preference</p>
+            <p class="text-xs text-on-surface-variant">Organic &amp; Natural</p>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px">local_shipping</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Shopping Mode</p>
+            <p class="text-xs text-on-surface-variant">Both / Multi-Modal</p>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px">payments</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Weekly Budget</p>
+            <p class="text-xs text-on-surface-variant">$150 per week</p>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section: Dietary -->
+    <div class="mb-5">
+      <h3 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wider mb-3">Dietary &amp; Health</h3>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+
+        <div class="flex items-center gap-4 p-4">
+          <div class="w-9 h-9 bg-tertiary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-tertiary" style="font-size:18px">no_meals</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Organic-only fallback</p>
+            <p class="text-xs text-on-surface-variant">Skip if organic not available</p>
+          </div>
+          <button role="switch" aria-checked="true" onclick="toggleSwitch(this)" class="relative w-12 h-7 rounded-full toggle-track bg-primary flex-shrink-0 focus:outline-none">
+            <span class="toggle-thumb absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md" style="transform:translateX(20px)"></span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-4 p-4">
+          <div class="w-9 h-9 bg-tertiary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-tertiary" style="font-size:18px">water_drop</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Lactose intolerant</p>
+            <p class="text-xs text-on-surface-variant">Suggest dairy alternatives</p>
+          </div>
+          <button role="switch" aria-checked="false" onclick="toggleSwitch(this)" class="relative w-12 h-7 rounded-full toggle-track bg-surface-container-high flex-shrink-0 focus:outline-none">
+            <span class="toggle-thumb absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md"></span>
+          </button>
+        </div>
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-tertiary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-tertiary" style="font-size:18px">block</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Allergies &amp; restrictions</p>
+            <p class="text-xs text-on-surface-variant">None set</p>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section: Notifications -->
+    <div class="mb-5">
+      <h3 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wider mb-3">Notifications</h3>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+
+        <div class="flex items-center gap-4 p-4">
+          <div class="w-9 h-9 bg-surface-container rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px">local_offer</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Deal alerts</p>
+            <p class="text-xs text-on-surface-variant">Notify when matched deals expire</p>
+          </div>
+          <button role="switch" aria-checked="true" onclick="toggleSwitch(this)" class="relative w-12 h-7 rounded-full toggle-track bg-primary flex-shrink-0 focus:outline-none">
+            <span class="toggle-thumb absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md" style="transform:translateX(20px)"></span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-4 p-4">
+          <div class="w-9 h-9 bg-surface-container rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px">shopping_cart</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-on-surface">Shopping reminders</p>
+            <p class="text-xs text-on-surface-variant">Weekly list reminder: Sunday 8am</p>
+          </div>
+          <button role="switch" aria-checked="true" onclick="toggleSwitch(this)" class="relative w-12 h-7 rounded-full toggle-track bg-primary flex-shrink-0 focus:outline-none">
+            <span class="toggle-thumb absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md" style="transform:translateX(20px)"></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section: Account -->
+    <div class="mb-5">
+      <h3 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wider mb-3">Account</h3>
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-surface-container rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px">person</span>
+          </div>
+          <span class="flex-1 text-sm font-semibold text-on-surface">Personal Information</span>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-surface-container rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px">lock</span>
+          </div>
+          <span class="flex-1 text-sm font-semibold text-on-surface">Privacy &amp; Security</span>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+        <div class="settings-row flex items-center gap-4 p-4 cursor-pointer">
+          <div class="w-9 h-9 bg-surface-container rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px">help</span>
+          </div>
+          <span class="flex-1 text-sm font-semibold text-on-surface">Help &amp; Support</span>
+          <span class="material-symbols-outlined text-outline-variant" style="font-size:18px">chevron_right</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Redo onboarding -->
+    <a href="screen1.html" class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl border border-outline-variant/30 text-sm font-semibold text-on-surface-variant hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-all duration-200 active:scale-[0.98]">
+      <span class="material-symbols-outlined" style="font-size:18px">refresh</span>
+      Redo Onboarding
+    </a>
+
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white rounded-t-[24px] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] px-8 pb-8 pt-4 z-50">
+    <div class="max-w-2xl mx-auto flex items-center justify-around">
+      <a href="lists.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">checklist</span>
+        <span class="text-xs font-medium">Lists</span>
+      </a>
+      <a href="deals.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">local_offer</span>
+        <span class="text-xs font-medium">Deals</span>
+      </a>
+      <a href="recipes.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">restaurant_menu</span>
+        <span class="text-xs font-medium">Recipes</span>
+      </a>
+      <a href="profile.html" class="nav-tab-active flex items-center gap-1.5 px-4 py-2 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">person</span>
+        <span class="text-xs font-semibold">Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    function toggleSwitch(btn) {
+      const isOn = btn.getAttribute('aria-checked') === 'true';
+      btn.setAttribute('aria-checked', !isOn);
+      const thumb = btn.querySelector('.toggle-thumb');
+      if (!isOn) {
+        btn.classList.remove('bg-surface-container-high');
+        btn.classList.add('bg-primary');
+        thumb.style.transform = 'translateX(20px)';
+      } else {
+        btn.classList.add('bg-surface-container-high');
+        btn.classList.remove('bg-primary');
+        thumb.style.transform = 'translateX(0)';
+      }
+    }
+  </script>
+
+  <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
+</body>
+</html>

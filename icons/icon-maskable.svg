@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full bleed background (maskable — no rounded corners) -->
+  <rect width="512" height="512" fill="#006a35"/>
+  <rect width="512" height="512" fill="url(#glow2)" opacity="0.25"/>
+  <defs>
+    <radialGradient id="glow2" cx="40%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#75f39c"/>
+      <stop offset="100%" stop-color="#006a35"/>
+    </radialGradient>
+  </defs>
+  <!-- Shopping bag body (safe zone: inset ~80px each side) -->
+  <path d="M185 232 L206 372 Q208 388 224 388 L288 388 Q304 388 306 372 L327 232 Z"
+        fill="white" opacity="0.95"/>
+  <!-- Bag handle -->
+  <path d="M218 232 Q218 175 256 175 Q294 175 294 232"
+        fill="none" stroke="white" stroke-width="22" stroke-linecap="round" opacity="0.95"/>
+  <!-- Leaf accent -->
+  <path d="M226 302 Q256 264 286 302 Q256 340 226 302 Z" fill="#75f39c"/>
+</svg>

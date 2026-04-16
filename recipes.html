@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>OptiCart — Recipes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OptiCart">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { manrope: ['Manrope', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: "#006a35", "primary-dim": "#005c2d", "primary-container": "#75f39c",
+            "on-primary": "#cdffd4", secondary: "#006946", "secondary-container": "#72fbbd",
+            "on-secondary-container": "#005e3e", surface: "#f6f6f9",
+            "surface-container-lowest": "#ffffff", "surface-container-low": "#f0f0f3",
+            "surface-container": "#e7e8eb", "surface-container-high": "#e1e2e6",
+            "surface-container-highest": "#dbdde0", "on-surface": "#2d2f31",
+            "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
+            tertiary: "#006576", "tertiary-container": "#00dcff",
+            "error-container": "#ffdad6", "on-error-container": "#410002",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { min-height: max(884px, 100dvh); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+    .nav-tab-active { background-color: #72fbbd; color: #005e3e; border-radius: 1rem; }
+    .nav-tab-inactive { color: #5a5c5e; }
+    .filter-chip { transition: all 0.2s ease; }
+    .filter-chip.active { background-color: #006a35; color: #cdffd4; }
+    .recipe-card { transition: box-shadow 0.25s ease, transform 0.15s ease; }
+    .recipe-card:active { transform: scale(0.98); }
+    .recipe-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-inter overflow-x-hidden">
+
+  <!-- Background blobs -->
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-80 h-80 bg-tertiary-container/15 rounded-full blur-[120px]"></div>
+    <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-primary-container/20 rounded-full blur-[120px]"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="fixed top-0 inset-x-0 z-50 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10">
+    <div class="max-w-2xl mx-auto h-full px-6 flex items-center justify-between">
+      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors duration-200 active:scale-95">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
+
+    <!-- Page heading -->
+    <div class="mb-5">
+      <h1 class="font-manrope font-bold text-2xl text-on-surface">Recipes</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Based on your list &amp; preferences</p>
+    </div>
+
+    <!-- Search bar -->
+    <div class="relative mb-5">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size:18px">search</span>
+      <input type="text" placeholder="Search recipes..." class="w-full h-12 bg-surface-container-lowest rounded-xl pl-10 pr-4 text-sm text-on-surface placeholder-on-surface-variant/50 outline-none border border-outline-variant/20 focus:border-primary/40 transition-colors">
+    </div>
+
+    <!-- Filter chips -->
+    <div class="flex gap-2 overflow-x-auto pb-1 mb-6 -mx-6 px-6" style="scrollbar-width:none">
+      <button onclick="setFilter(this)" class="filter-chip active flex-shrink-0 px-4 py-2 rounded-full bg-primary text-on-primary text-xs font-semibold transition-all duration-200 active:scale-95">All</button>
+      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">🌱 Vegan</button>
+      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">⚡ Quick</button>
+      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">💰 Budget</button>
+      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">💪 High Protein</button>
+      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">🫀 Heart Healthy</button>
+    </div>
+
+    <!-- AI match banner -->
+    <div class="flex items-center gap-2 bg-secondary-container/20 rounded-xl px-4 py-3 mb-5 border border-secondary/10">
+      <span class="material-symbols-outlined text-primary" style="font-size:18px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+      <p class="text-xs text-on-surface-variant leading-snug flex-1">Recipes are ranked by how well they match ingredients in <span class="font-semibold text-on-surface">your current list</span>.</p>
+    </div>
+
+    <!-- Recipe list -->
+    <div class="space-y-4">
+
+      <!-- Avocado Toast -->
+      <div class="recipe-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row cursor-pointer">
+        <div class="w-28 flex-shrink-0 bg-gradient-to-br from-primary/40 to-secondary/50 flex items-center justify-center text-4xl relative" style="min-height:128px">
+          🥑
+          <span class="absolute top-2 left-2 text-xs font-bold bg-primary text-on-primary px-2 py-0.5 rounded-full">94%</span>
+        </div>
+        <div class="p-4 flex flex-col justify-between flex-1 min-w-0">
+          <div>
+            <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-2">Avocado Toast with Poached Eggs</h3>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Vegan</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">20 min</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Budget</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+              <span class="text-xs font-semibold text-primary">94% ingredient match</span>
+            </div>
+            <button class="text-xs font-bold text-primary hover:text-primary-dim transition-colors">View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Greek Yogurt Parfait -->
+      <div class="recipe-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row cursor-pointer">
+        <div class="w-28 flex-shrink-0 bg-gradient-to-br from-secondary-container/60 to-primary-container/40 flex items-center justify-center text-4xl relative" style="min-height:128px">
+          🫙
+          <span class="absolute top-2 left-2 text-xs font-bold bg-primary text-on-primary px-2 py-0.5 rounded-full">88%</span>
+        </div>
+        <div class="p-4 flex flex-col justify-between flex-1 min-w-0">
+          <div>
+            <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-2">Greek Yogurt Parfait</h3>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Healthy</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">5 min</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">High Protein</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+              <span class="text-xs font-semibold text-primary">88% ingredient match</span>
+            </div>
+            <button class="text-xs font-bold text-primary hover:text-primary-dim transition-colors">View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sourdough Grilled Cheese -->
+      <div class="recipe-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row cursor-pointer">
+        <div class="w-28 flex-shrink-0 bg-gradient-to-br from-yellow-200/60 to-orange-200/50 flex items-center justify-center text-4xl relative" style="min-height:128px">
+          🧀
+          <span class="absolute top-2 left-2 text-xs font-bold bg-primary text-on-primary px-2 py-0.5 rounded-full">82%</span>
+        </div>
+        <div class="p-4 flex flex-col justify-between flex-1 min-w-0">
+          <div>
+            <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-2">Sourdough Grilled Cheese</h3>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Comfort</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">10 min</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Kid-Friendly</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+              <span class="text-xs font-semibold text-primary">82% ingredient match</span>
+            </div>
+            <button class="text-xs font-bold text-primary hover:text-primary-dim transition-colors">View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spinach Omelette -->
+      <div class="recipe-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row cursor-pointer">
+        <div class="w-28 flex-shrink-0 bg-gradient-to-br from-green-200/60 to-yellow-100/40 flex items-center justify-center text-4xl relative" style="min-height:128px">
+          🍳
+          <span class="absolute top-2 left-2 text-xs font-bold bg-primary text-on-primary px-2 py-0.5 rounded-full">78%</span>
+        </div>
+        <div class="p-4 flex flex-col justify-between flex-1 min-w-0">
+          <div>
+            <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-2">Spinach &amp; Egg Omelette</h3>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Quick</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">15 min</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">High Protein</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+              <span class="text-xs font-semibold text-primary">78% ingredient match</span>
+            </div>
+            <button class="text-xs font-bold text-primary hover:text-primary-dim transition-colors">View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caprese Salad -->
+      <div class="recipe-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row cursor-pointer">
+        <div class="w-28 flex-shrink-0 bg-gradient-to-br from-red-200/50 to-green-200/40 flex items-center justify-center text-4xl relative" style="min-height:128px">
+          🍅
+          <span class="absolute top-2 left-2 text-xs font-bold bg-primary text-on-primary px-2 py-0.5 rounded-full">71%</span>
+        </div>
+        <div class="p-4 flex flex-col justify-between flex-1 min-w-0">
+          <div>
+            <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-2">Tomato Caprese Salad</h3>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Vegan</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">5 min</span>
+              <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">Heart Healthy</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
+              <span class="text-xs font-semibold text-primary">71% ingredient match</span>
+            </div>
+            <button class="text-xs font-bold text-primary hover:text-primary-dim transition-colors">View</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white rounded-t-[24px] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] px-8 pb-8 pt-4 z-50">
+    <div class="max-w-2xl mx-auto flex items-center justify-around">
+      <a href="lists.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">checklist</span>
+        <span class="text-xs font-medium">Lists</span>
+      </a>
+      <a href="deals.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">local_offer</span>
+        <span class="text-xs font-medium">Deals</span>
+      </a>
+      <a href="recipes.html" class="nav-tab-active flex items-center gap-1.5 px-4 py-2 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">restaurant_menu</span>
+        <span class="text-xs font-semibold">Recipes</span>
+      </a>
+      <a href="profile.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">person</span>
+        <span class="text-xs font-medium">Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    function setFilter(el) {
+      document.querySelectorAll('.filter-chip').forEach(c => {
+        c.classList.remove('active', 'bg-primary', 'text-on-primary');
+        c.classList.add('bg-surface-container-lowest', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
+      });
+      el.classList.add('active', 'bg-primary', 'text-on-primary');
+      el.classList.remove('bg-surface-container-lowest', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
+    }
+  </script>
+
+  <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
+</body>
+</html>
