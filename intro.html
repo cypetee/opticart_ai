@@ -35,145 +35,108 @@
     }
   </script>
   <style>
+    html, body { height: 100%; }
     body { min-height: 100dvh; }
     @keyframes float-slow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-14px) rotate(3deg); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
     }
     @keyframes float-med {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(-4deg); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
     }
     @keyframes blob-drift {
       0%, 100% { transform: translate(0,0) scale(1); }
-      33% { transform: translate(20px,-15px) scale(1.05); }
-      66% { transform: translate(-10px,10px) scale(0.97); }
+      50% { transform: translate(15px,-12px) scale(1.05); }
     }
-    .float-slow { animation: float-slow 5s ease-in-out infinite; }
-    .float-med  { animation: float-med  4s ease-in-out infinite 0.8s; }
-    .blob-drift { animation: blob-drift 9s ease-in-out infinite; }
-    .produce-badge {
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
+    .float-slow { animation: float-slow 4s ease-in-out infinite; }
+    .float-med  { animation: float-med 3.5s ease-in-out infinite 0.6s; }
+    .blob-drift { animation: blob-drift 8s ease-in-out infinite; }
   </style>
 </head>
-<body class="bg-surface font-inter overflow-y-auto flex flex-col" style="min-height:100dvh">
+<body class="bg-surface font-inter" style="min-height:100dvh; display:flex; flex-direction:column;">
 
   <!-- Background gradient blobs -->
   <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
     <div class="blob-drift absolute -top-40 -right-24 w-96 h-96 bg-primary-container/30 rounded-full blur-[140px]"></div>
-    <div class="blob-drift absolute top-1/3 -left-32 w-80 h-80 bg-secondary-container/25 rounded-full blur-[120px]" style="animation-delay:3s"></div>
-    <div class="blob-drift absolute -bottom-20 right-8 w-72 h-72 bg-tertiary-container/15 rounded-full blur-[100px]" style="animation-delay:6s"></div>
+    <div class="blob-drift absolute -bottom-20 -left-24 w-80 h-80 bg-secondary-container/20 rounded-full blur-[120px]" style="animation-delay:4s"></div>
   </div>
 
-  <!-- Top spacer + logo mark -->
-  <div class="flex flex-col items-center pt-16 px-6">
-    <!-- Logo icon -->
-    <div class="w-20 h-20 rounded-[22px] bg-gradient-to-br from-primary to-primary-dim shadow-[0_8px_32px_rgba(0,106,53,0.35)] flex items-center justify-center mb-4 float-slow">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Cart basket -->
-        <rect x="8" y="14" width="26" height="16" rx="4" fill="#cdffd4" opacity="0.9"/>
-        <!-- Panel lines -->
-        <line x1="16" y1="14" x2="16" y2="30" stroke="#006a35" stroke-width="1.2" opacity="0.5"/>
-        <line x1="24" y1="14" x2="24" y2="30" stroke="#006a35" stroke-width="1.2" opacity="0.5"/>
-        <!-- Handle -->
-        <path d="M12 14 Q13 8 22 8 Q31 8 32 14" stroke="#cdffd4" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <!-- Eye sensors -->
-        <circle cx="17.5" cy="22" r="2.5" fill="#006a35"/>
-        <circle cx="26.5" cy="22" r="2.5" fill="#006a35"/>
-        <circle cx="17.5" cy="22" r="1" fill="#72fbbd"/>
-        <circle cx="26.5" cy="22" r="1" fill="#72fbbd"/>
-        <!-- Wheels -->
-        <circle cx="15" cy="33" r="3" fill="#005c2d" stroke="#72fbbd" stroke-width="1.2"/>
-        <circle cx="29" cy="33" r="3" fill="#005c2d" stroke="#72fbbd" stroke-width="1.2"/>
-        <circle cx="15" cy="33" r="1" fill="#72fbbd"/>
-        <circle cx="29" cy="33" r="1" fill="#72fbbd"/>
-        <!-- Antenna -->
-        <line x1="22" y1="8" x2="22" y2="4" stroke="#72fbbd" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="22" cy="3" r="1.5" fill="#72fbbd"/>
-      </svg>
+  <!-- Scrollable top content -->
+  <div style="flex:1; overflow-y:auto; padding-bottom:200px;">
+
+    <!-- Logo -->
+    <div class="flex flex-col items-center pt-14 pb-2 px-6">
+      <div class="w-20 h-20 rounded-[22px] bg-gradient-to-br from-primary to-primary-dim shadow-[0_8px_32px_rgba(0,106,53,0.35)] flex items-center justify-center mb-3 float-slow">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="14" width="26" height="16" rx="4" fill="#cdffd4" opacity="0.9"/>
+          <line x1="16" y1="14" x2="16" y2="30" stroke="#006a35" stroke-width="1.2" opacity="0.5"/>
+          <line x1="24" y1="14" x2="24" y2="30" stroke="#006a35" stroke-width="1.2" opacity="0.5"/>
+          <path d="M12 14 Q13 8 22 8 Q31 8 32 14" stroke="#cdffd4" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <circle cx="17.5" cy="22" r="2.5" fill="#006a35"/><circle cx="26.5" cy="22" r="2.5" fill="#006a35"/>
+          <circle cx="17.5" cy="22" r="1" fill="#72fbbd"/><circle cx="26.5" cy="22" r="1" fill="#72fbbd"/>
+          <circle cx="15" cy="33" r="3" fill="#005c2d" stroke="#72fbbd" stroke-width="1.2"/>
+          <circle cx="29" cy="33" r="3" fill="#005c2d" stroke="#72fbbd" stroke-width="1.2"/>
+          <circle cx="15" cy="33" r="1" fill="#72fbbd"/><circle cx="29" cy="33" r="1" fill="#72fbbd"/>
+          <line x1="22" y1="8" x2="22" y2="4" stroke="#72fbbd" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="22" cy="3" r="1.5" fill="#72fbbd"/>
+        </svg>
+      </div>
+      <span class="font-manrope font-extrabold italic text-2xl tracking-tight text-on-surface">OptiCart</span>
     </div>
-    <!-- Wordmark -->
-    <span class="font-manrope font-extrabold italic text-2xl tracking-tight text-on-surface">OptiCart</span>
-  </div>
 
-  <!-- Hero illustration area -->
-  <div class="relative flex-1 flex items-center justify-center px-6 py-4" style="max-height:320px">
-    <!-- Central glow disc -->
-    <div class="absolute w-64 h-64 rounded-full bg-primary-container/20 blur-2xl"></div>
-
-    <!-- Floating produce items -->
-    <div class="relative w-72 h-64">
-      <!-- Large center item -->
-      <div class="float-slow absolute inset-0 flex items-center justify-center">
-        <div class="w-36 h-36 rounded-3xl bg-gradient-to-br from-primary/15 to-secondary-container/30 border border-primary/10 flex items-center justify-center text-6xl shadow-lg">
-          🛒
+    <!-- Hero illustration -->
+    <div class="relative flex items-center justify-center px-6 py-6" style="height:240px;">
+      <div class="absolute w-48 h-48 rounded-full bg-primary-container/20 blur-2xl"></div>
+      <div class="relative" style="width:260px; height:200px;">
+        <!-- Center cart -->
+        <div class="float-slow absolute inset-0 flex items-center justify-center">
+          <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-primary/15 to-secondary-container/30 border border-primary/10 flex items-center justify-center shadow-lg" style="font-size:48px">🛒</div>
         </div>
-      </div>
-
-      <!-- Orbiting food badges -->
-      <div class="float-med absolute top-0 left-4 produce-badge bg-white/80 border border-outline-variant/20 rounded-2xl px-3 py-2 shadow-sm flex items-center gap-2">
-        <span class="text-2xl">🥬</span>
-        <div>
-          <p class="text-xs font-semibold text-on-surface leading-none">Kale</p>
-          <p class="text-xs text-primary font-bold">Save 20%</p>
+        <!-- Badges -->
+        <div class="float-med absolute top-0 left-0 bg-white/90 border border-outline-variant/20 rounded-2xl px-3 py-1.5 shadow-sm flex items-center gap-1.5">
+          <span style="font-size:18px">🥬</span>
+          <div><p class="text-xs font-semibold text-on-surface leading-none">Kale</p><p class="text-xs text-primary font-bold">Save 20%</p></div>
         </div>
-      </div>
-
-      <div class="float-slow absolute top-2 right-2 produce-badge bg-white/80 border border-outline-variant/20 rounded-2xl px-3 py-2 shadow-sm flex items-center gap-2" style="animation-delay:1.2s">
-        <span class="text-2xl">🍓</span>
-        <div>
-          <p class="text-xs font-semibold text-on-surface leading-none">Strawberries</p>
-          <p class="text-xs text-primary font-bold">Fresh pick</p>
+        <div class="float-slow absolute top-0 right-0 bg-white/90 border border-outline-variant/20 rounded-2xl px-3 py-1.5 shadow-sm flex items-center gap-1.5" style="animation-delay:1s">
+          <span style="font-size:18px">🍓</span>
+          <div><p class="text-xs font-semibold text-on-surface leading-none">Berries</p><p class="text-xs text-primary font-bold">Fresh</p></div>
         </div>
-      </div>
-
-      <div class="float-med absolute bottom-4 left-0 produce-badge bg-white/80 border border-outline-variant/20 rounded-2xl px-3 py-2 shadow-sm flex items-center gap-2" style="animation-delay:0.4s">
-        <span class="text-2xl">🥑</span>
-        <div>
-          <p class="text-xs font-semibold text-on-surface leading-none">Avocado</p>
-          <p class="text-xs text-on-surface-variant">On your list</p>
+        <div class="float-med absolute bottom-0 left-0 bg-white/90 border border-outline-variant/20 rounded-2xl px-3 py-1.5 shadow-sm flex items-center gap-1.5" style="animation-delay:0.4s">
+          <span style="font-size:18px">🥑</span>
+          <div><p class="text-xs font-semibold text-on-surface leading-none">Avocado</p><p class="text-xs text-on-surface-variant">On list</p></div>
         </div>
-      </div>
-
-      <div class="float-slow absolute bottom-2 right-0 produce-badge bg-white/80 border border-outline-variant/20 rounded-2xl px-3 py-2 shadow-sm flex items-center gap-2" style="animation-delay:2s">
-        <span class="text-2xl">🥛</span>
-        <div>
-          <p class="text-xs font-semibold text-on-surface leading-none">Oat Milk</p>
-          <p class="text-xs text-primary font-bold">Deal alert</p>
+        <div class="float-slow absolute bottom-0 right-0 bg-white/90 border border-outline-variant/20 rounded-2xl px-3 py-1.5 shadow-sm flex items-center gap-1.5" style="animation-delay:1.8s">
+          <span style="font-size:18px">🥛</span>
+          <div><p class="text-xs font-semibold text-on-surface leading-none">Oat Milk</p><p class="text-xs text-primary font-bold">Deal!</p></div>
         </div>
-      </div>
-
-      <!-- Mission badge -->
-      <div class="float-med absolute -bottom-2 left-1/2 -translate-x-1/2 produce-badge bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 shadow-sm flex items-center gap-1.5" style="animation-delay:1.6s">
-        <span class="text-sm">🎯</span>
-        <p class="text-xs font-bold text-primary">Mission: 87% complete</p>
       </div>
     </div>
+
+    <!-- Text -->
+    <div class="px-6">
+      <h1 class="font-manrope font-extrabold text-[26px] leading-tight text-on-surface mb-3">
+        Your Personal Digital Curator for Every Aisle.
+      </h1>
+      <p class="text-sm text-on-surface-variant leading-relaxed">
+        Transform your shopping list into a tactical mission: Save time, reduce waste, and discover the freshest picks tailored just for you.
+      </p>
+    </div>
+
   </div>
 
-  <!-- Bottom CTA section -->
-  <div class="px-6 pb-12">
-    <h1 class="font-manrope font-extrabold text-[28px] leading-tight text-on-surface mb-3">
-      Your Personal Digital Curator<br>for Every Aisle.
-    </h1>
-    <p class="text-sm text-on-surface-variant leading-relaxed mb-8">
-      Transform your shopping list into a tactical mission: Save time, reduce waste, and discover the freshest picks tailored just for you.
-    </p>
-
-    <!-- CTA button -->
-    <button onclick="window.location.href='signup.html'" class="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-manrope font-bold text-base shadow-[0_8px_32px_rgba(0,106,53,0.3)] active:scale-[0.98] transition-all duration-200 mb-5">
+  <!-- Fixed bottom CTA — always visible -->
+  <div class="fixed bottom-0 inset-x-0 bg-surface/95 backdrop-blur-md px-6 pt-4 pb-10 border-t border-outline-variant/10">
+    <button onclick="window.location.href='signup.html'"
+      class="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-manrope font-bold text-base shadow-[0_8px_32px_rgba(0,106,53,0.3)] active:scale-[0.98] transition-all duration-200 mb-3">
       Get Started
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.75 9h10.5M9.75 4.5L14.25 9l-4.5 4.5" stroke="#cdffd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-
-    <!-- Social proof -->
     <div class="flex items-center justify-center gap-2">
       <div class="flex -space-x-2">
-        <div class="w-7 h-7 rounded-full bg-primary-container border-2 border-white flex items-center justify-center text-xs">😊</div>
-        <div class="w-7 h-7 rounded-full bg-secondary-container border-2 border-white flex items-center justify-center text-xs">😄</div>
-        <div class="w-7 h-7 rounded-full bg-tertiary-container border-2 border-white flex items-center justify-center text-xs">🙂</div>
+        <div class="w-6 h-6 rounded-full bg-primary-container border-2 border-white flex items-center justify-center text-xs">😊</div>
+        <div class="w-6 h-6 rounded-full bg-secondary-container border-2 border-white flex items-center justify-center text-xs">😄</div>
+        <div class="w-6 h-6 rounded-full bg-tertiary-container border-2 border-white flex items-center justify-center text-xs">🙂</div>
       </div>
       <p class="text-xs text-on-surface-variant font-medium">Trusted by <span class="font-bold text-on-surface">10,000+</span> smart shoppers</p>
     </div>
