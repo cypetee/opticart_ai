@@ -72,9 +72,21 @@
   <main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
 
     <!-- Page heading -->
-    <div class="mb-6">
-      <h1 class="font-manrope font-bold text-2xl text-on-surface">My Lists</h1>
-      <p class="text-sm text-on-surface-variant mt-1" id="list-subtitle">Loading...</p>
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <h1 class="font-manrope font-bold text-2xl text-on-surface">My Lists</h1>
+        <p class="text-sm text-on-surface-variant mt-1" id="list-subtitle">Loading...</p>
+      </div>
+      <div class="flex gap-2 mt-1">
+        <button onclick="addAllToCart()" class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-primary text-on-primary text-xs font-bold shadow-sm active:scale-95 transition-all">
+          <span class="material-symbols-outlined" style="font-size:15px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">shopping_cart</span>
+          Add All
+        </button>
+        <button onclick="clearList()" class="flex items-center gap-1 px-3 py-2 rounded-full border border-outline-variant/40 text-on-surface-variant text-xs font-semibold active:scale-95 transition-all hover:border-error/40 hover:text-error">
+          <span class="material-symbols-outlined" style="font-size:15px">delete_sweep</span>
+          Clear
+        </button>
+      </div>
     </div>
 
     <!-- Search / filter bar -->
@@ -195,6 +207,44 @@
 
       const today = new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
       document.getElementById('list-subtitle').textContent = `${today} · ${total} items`;
+    }
+
+    function addAllToCart() {
+      if (!listIds.length) return;
+      const db = window.GROCERY_DB;
+      const cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+      let added = 0;
+      listIds.forEach(id => {
+        const item = db && db.items.find(i => i.id === id);
+        if (!item) return;
+        const existing = cart.find(i => i.id === id);
+        if (existing) { existing.qty++; } else { cart.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qty: 1 }); }
+        added++;
+      });
+      localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      showToast(`${added} item${added !== 1 ? 's' : ''} added to cart ✓`);
+    }
+
+    function clearList() {
+      if (!listIds.length) return;
+      listIds = [];
+      checkedIds = [];
+      saveState();
+      renderQuickAdd();
+    }
+
+    function showToast(msg) {
+      let t = document.getElementById('list-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'list-toast';
+        t.className = 'fixed bottom-24 inset-x-6 max-w-sm mx-auto bg-on-surface text-surface text-sm font-semibold rounded-xl px-4 py-3 text-center z-[200] shadow-lg flex items-center justify-between gap-3 transition-opacity duration-300';
+        document.body.appendChild(t);
+      }
+      t.innerHTML = `<span>${msg}</span><a href="cart.html" class="underline font-bold flex-shrink-0">View →</a>`;
+      t.style.opacity = '1';
+      clearTimeout(t._t);
+      t._t = setTimeout(() => t.style.opacity = '0', 2800);
     }
 
     function addToCart(itemId) {
