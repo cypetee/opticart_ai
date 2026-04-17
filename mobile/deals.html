@@ -178,7 +178,10 @@
             <span class="text-xs text-on-surface-variant line-through">$${orig.toFixed(2)}</span>
             <span class="text-sm font-bold text-primary">$${salePrice}</span>
           </div>
-          <button onclick="addToCart(this,'${item.id}')" class="w-full text-xs font-semibold bg-primary-container text-on-secondary-container rounded-lg py-2 px-3 active:scale-[0.98] transition-all">Add to Cart</button>
+          <div class="flex gap-2">
+            <button onclick="addToList(this,'${item.id}')" class="flex-1 text-xs font-semibold bg-primary-container text-on-secondary-container rounded-lg py-2 px-2 active:scale-[0.98] transition-all">+ List</button>
+            <button onclick="addToCartDirect(this,'${item.id}')" class="flex-1 text-xs font-semibold bg-primary text-on-primary rounded-lg py-2 px-2 active:scale-[0.98] transition-all">+ Cart</button>
+          </div>
         </div>`;
     }
 
@@ -199,10 +202,15 @@
         </div>`;
     }
 
-    function addToCart(btn, itemId) {
-      btn.textContent = 'Added ✓';
-      btn.classList.add('bg-primary', 'text-on-primary');
-      btn.classList.remove('bg-primary-container', 'text-on-secondary-container');
+    function addToList(btn, itemId) {
+      const list = JSON.parse(localStorage.getItem('opticart_list') || '[]');
+      if (!list.includes(itemId)) { list.push(itemId); localStorage.setItem('opticart_list', JSON.stringify(list)); }
+      btn.textContent = '✓ List';
+      btn.disabled = true;
+      btn.classList.add('opacity-60');
+    }
+
+    function addToCartDirect(btn, itemId) {
       const cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
       const existing = cart.find(i => i.id === itemId);
       if (existing) { existing.qty++; }
@@ -211,6 +219,9 @@
         if (item) cart.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qty: 1 });
       }
       localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      btn.textContent = '✓ Cart';
+      btn.disabled = true;
+      btn.classList.add('opacity-60');
     }
 
     function loadDeals() {
