@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>OptiCart — Cart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OptiCart">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { manrope: ['Manrope', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: "#006a35", "primary-dim": "#005c2d", "primary-container": "#75f39c",
+            "on-primary": "#cdffd4", secondary: "#006946", "secondary-container": "#72fbbd",
+            "on-secondary-container": "#005e3e", surface: "#f6f6f9",
+            "surface-container-lowest": "#ffffff", "surface-container-low": "#f0f0f3",
+            "surface-container": "#e7e8eb", "surface-container-high": "#e1e2e6",
+            "surface-container-highest": "#dbdde0", "on-surface": "#2d2f31",
+            "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
+            tertiary: "#006576", "tertiary-container": "#00dcff",
+            "error-container": "#ffdad6", "on-error-container": "#410002",
+            error: "#b31b25",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { min-height: max(884px, 100dvh); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+    .nav-tab-active { background-color: #72fbbd; color: #005e3e; border-radius: 1rem; }
+    .nav-tab-inactive { color: #5a5c5e; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-inter overflow-x-hidden">
+
+  <!-- Background blobs -->
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-80 h-80 bg-primary-container/20 rounded-full blur-[120px]"></div>
+    <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-secondary-container/15 rounded-full blur-[100px]"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="fixed top-0 inset-x-0 z-50 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10">
+    <div class="max-w-2xl mx-auto h-full px-6 flex items-center justify-between">
+      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+      <button onclick="clearCart()" class="text-xs font-semibold text-on-surface-variant border border-outline-variant/30 rounded-full px-3 py-1.5 hover:border-primary/40 hover:text-primary transition-all active:scale-95">Clear all</button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="pt-24 pb-40 px-6 max-w-2xl mx-auto">
+
+    <!-- Page heading -->
+    <div class="mb-6">
+      <h1 class="font-manrope font-bold text-2xl text-on-surface">My Cart</h1>
+      <p class="text-sm text-on-surface-variant mt-1" id="cart-subtitle">Loading...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-center">
+      <div class="text-6xl mb-4">🛒</div>
+      <h2 class="font-manrope font-bold text-lg text-on-surface mb-2">Your cart is empty</h2>
+      <p class="text-sm text-on-surface-variant mb-6">Add items from Missions or Deals</p>
+      <a href="missions.html" class="px-6 py-3 bg-primary text-on-primary rounded-full font-semibold text-sm hover:bg-primary-dim transition-colors active:scale-95">
+        Go to Missions
+      </a>
+    </div>
+
+    <!-- Cart items by category -->
+    <div id="cart-categories"></div>
+
+    <!-- Order summary -->
+    <div id="order-summary" class="hidden bg-surface-container-lowest rounded-2xl p-5 shadow-sm mb-4">
+      <h3 class="font-manrope font-bold text-sm text-on-surface mb-4 uppercase tracking-wide">Order Summary</h3>
+
+      <div class="space-y-2 mb-4">
+        <div class="flex justify-between text-sm">
+          <span class="text-on-surface-variant">Subtotal</span>
+          <span class="font-semibold text-on-surface" id="subtotal">$0.00</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-on-surface-variant">Est. savings</span>
+          <span class="font-semibold text-primary" id="savings">-$0.00</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-on-surface-variant">Mission discount</span>
+          <span class="font-semibold text-primary" id="mission-discount">-$0.00</span>
+        </div>
+        <div class="h-px bg-outline-variant/20 my-2"></div>
+        <div class="flex justify-between">
+          <span class="font-manrope font-bold text-on-surface">Total</span>
+          <span class="font-manrope font-bold text-xl text-primary" id="total">$0.00</span>
+        </div>
+      </div>
+
+      <!-- Mission progress inline -->
+      <div class="bg-primary-container/15 rounded-xl p-3">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-semibold text-on-surface">Weekly Mission</span>
+          <span class="text-xs font-bold text-primary" id="cart-mission-pct">0%</span>
+        </div>
+        <div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-primary to-secondary-container rounded-full transition-all duration-500" id="cart-mission-bar" style="width:0%"></div>
+        </div>
+        <p class="text-xs text-on-surface-variant mt-1.5" id="cart-mission-hint">Add more items to unlock 15% off!</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Checkout bar (sticky) -->
+  <div id="checkout-bar" class="hidden fixed bottom-[72px] inset-x-0 px-6 pb-3 z-40">
+    <div class="max-w-2xl mx-auto">
+      <button onclick="checkout()" class="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-manrope font-bold text-base shadow-[0_8px_32px_rgba(0,106,53,0.3)] active:scale-[0.98] transition-all duration-200">
+        <span class="flex items-center gap-2">
+          <span class="material-symbols-outlined" style="font-size:20px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">rocket_launch</span>
+          Checkout
+        </span>
+        <span id="checkout-total" class="text-on-primary/90 font-bold">$0.00</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white rounded-t-[24px] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] px-8 pb-8 pt-4 z-50">
+    <div class="max-w-2xl mx-auto flex items-center justify-around">
+      <a href="lists.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">checklist</span>
+        <span class="text-xs font-medium">Lists</span>
+      </a>
+      <a href="missions.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">assignment_turned_in</span>
+        <span class="text-xs font-medium">Missions</span>
+      </a>
+      <a href="deals.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">local_offer</span>
+        <span class="text-xs font-medium">Deals</span>
+      </a>
+      <a href="cart.html" class="nav-tab-active flex items-center gap-1.5 px-4 py-2 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">shopping_cart</span>
+        <span class="text-xs font-semibold">Cart</span>
+      </a>
+    </div>
+  </nav>
+
+  <script src="data/grocery.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    let cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+
+    function saveCart() {
+      localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      render();
+    }
+
+    function clearCart() {
+      cart = [];
+      saveCart();
+    }
+
+    function removeItem(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      saveCart();
+    }
+
+    function render() {
+      const empty = document.getElementById('empty-state');
+      const categories = document.getElementById('cart-categories');
+      const summary = document.getElementById('order-summary');
+      const checkoutBar = document.getElementById('checkout-bar');
+      const subtitle = document.getElementById('cart-subtitle');
+
+      const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+      subtitle.textContent = `${totalQty} item${totalQty !== 1 ? 's' : ''} · ${new Date().toLocaleDateString('en-US',{weekday:'long', month:'short', day:'numeric'})}`;
+
+      if (cart.length === 0) {
+        empty.classList.remove('hidden');
+        categories.innerHTML = '';
+        summary.classList.add('hidden');
+        checkoutBar.classList.add('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      summary.classList.remove('hidden');
+      checkoutBar.classList.remove('hidden');
+
+      // Group by category
+      const db = window.GROCERY_DB;
+      const groups = {};
+      for (const cartItem of cart) {
+        const dbItem = db ? db.items.find(i => i.id === cartItem.id) : null;
+        const cat = dbItem ? dbItem.cat : 'Other';
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push({ ...cartItem, dbItem });
+      }
+
+      const CAT_EMOJIS = {
+        'Produce':'🥬','Dairy & Eggs':'🥛','Meat & Seafood':'🥩',
+        'Plant-Based':'🌱','Bakery':'🍞','Frozen':'🧊',
+        'Grains & Pasta':'🌾','Canned Goods':'🥫','Pantry & Condiments':'🫙',
+        'Beverages':'🥤','Snacks':'🍿','Breakfast':'🥣','Specialty':'⭐','Other':'🛒'
+      };
+
+      categories.innerHTML = Object.entries(groups).map(([cat, items]) => `
+        <div class="mb-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-base">${CAT_EMOJIS[cat] || '🛒'}</span>
+            <h2 class="font-manrope font-bold text-xs text-on-surface uppercase tracking-wide">${cat}</h2>
+          </div>
+          <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm divide-y divide-outline-variant/10">
+            ${items.map(item => `
+              <div class="flex items-center gap-3 p-4">
+                <span class="text-2xl flex-shrink-0">${item.emoji}</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-on-surface truncate">${item.name}</p>
+                  <p class="text-xs text-on-surface-variant">$${item.price.toFixed(2)} each${item.dbItem ? ' · ' + item.dbItem.unit : ''}</p>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <button onclick="changeQty('${item.id}',-1)" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high active:scale-90 transition-all">
+                    <span class="material-symbols-outlined text-on-surface-variant" style="font-size:16px">remove</span>
+                  </button>
+                  <span class="font-bold text-sm text-on-surface w-5 text-center">${item.qty}</span>
+                  <button onclick="changeQty('${item.id}',1)" class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center hover:opacity-80 active:scale-90 transition-all">
+                    <span class="material-symbols-outlined text-on-secondary-container" style="font-size:16px">add</span>
+                  </button>
+                </div>
+                <span class="font-semibold text-sm text-on-surface w-14 text-right flex-shrink-0">$${(item.price * item.qty).toFixed(2)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      // Summary calculations
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const dealSavings = cart.reduce((s, i) => {
+        const dbItem = db ? db.items.find(d => d.id === i.id) : null;
+        if (dbItem && dbItem.deal) return s + (dbItem.price * dbItem.deal / 100) * i.qty;
+        return s;
+      }, 0);
+      const MISSION_TARGET = 10;
+      const missionPct = Math.min(Math.round((totalQty / MISSION_TARGET) * 100), 100);
+      const missionDiscount = missionPct >= 100 ? subtotal * 0.15 : 0;
+      const total = Math.max(subtotal - missionDiscount, 0);
+
+      document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('savings').textContent = '-$' + dealSavings.toFixed(2);
+      document.getElementById('mission-discount').textContent = missionDiscount > 0 ? '-$' + missionDiscount.toFixed(2) : '-$0.00';
+      document.getElementById('total').textContent = '$' + total.toFixed(2);
+      document.getElementById('checkout-total').textContent = '$' + total.toFixed(2);
+
+      document.getElementById('cart-mission-pct').textContent = missionPct + '%';
+      document.getElementById('cart-mission-bar').style.width = missionPct + '%';
+      const remaining = Math.max(MISSION_TARGET - totalQty, 0);
+      document.getElementById('cart-mission-hint').textContent = remaining > 0
+        ? `Add ${remaining} more item${remaining !== 1 ? 's' : ''} to unlock 15% off!`
+        : '🎉 Mission complete! 15% off applied.';
+    }
+
+    function checkout() {
+      alert('Checkout coming soon! Your cart total is ' + document.getElementById('total').textContent);
+    }
+
+    render();
+  </script>
+
+  <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
+</body>
+</html>

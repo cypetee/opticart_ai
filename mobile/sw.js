@@ -1,13 +1,15 @@
-const CACHE = 'opticart-v2';
+const CACHE = 'opticart-v3';
 const ASSETS = [
   './screen1.html',
   './screen2.html',
   './screen3.html',
   './screen4.html',
+  './missions.html',
   './deals.html',
   './lists.html',
   './recipes.html',
   './profile.html',
+  './cart.html',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-maskable.svg',
