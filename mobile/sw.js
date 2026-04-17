@@ -1,4 +1,4 @@
-const CACHE = 'opticart-v8';
+const CACHE = 'opticart-v9';
 const ASSETS = [
   './intro.html',
   './signup.html',
@@ -17,6 +17,7 @@ const ASSETS = [
   './icons/icon-maskable.svg',
   './js/storage.js',
   './js/ai-filter.js',
+  './data/recipes.js',
   // grocery.js intentionally excluded — always fetched fresh from network
 ];
 

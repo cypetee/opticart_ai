@@ -31,6 +31,7 @@
             "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
             tertiary: "#006576", "tertiary-container": "#00dcff",
             "error-container": "#ffdad6", "on-error-container": "#410002",
+            error: "#b31b25",
           }
         }
       }
@@ -41,11 +42,19 @@
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
     .nav-tab-active { background-color: #72fbbd; color: #005e3e; border-radius: 1rem; }
     .nav-tab-inactive { color: #5a5c5e; }
-    .filter-chip { transition: all 0.2s ease; }
-    .filter-chip.active { background-color: #006a35; color: #cdffd4; }
-    .recipe-card { transition: box-shadow 0.25s ease, transform 0.15s ease; }
-    .recipe-card:active { transform: scale(0.98); }
-    .recipe-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+    .chip-active { background-color: #006a35; color: #cdffd4; }
+    .chip-inactive { background-color: #ffffff; color: #5a5c5e; border: 1px solid #acadaf40; }
+    .recipe-img { transition: transform 0.3s ease; }
+    .recipe-card:active .recipe-img { transform: scale(1.03); }
+    .cat-vegan       { background:#dcfce7; color:#15803d; }
+    .cat-vegetarian  { background:#fef9c3; color:#a16207; }
+    .cat-keto        { background:#fce7f3; color:#be185d; }
+    .cat-meat-heavy  { background:#fee2e2; color:#b91c1c; }
+    .cat-pescatarian { background:#dbeafe; color:#1d4ed8; }
+    .modal-sheet { transform: translateY(100%); transition: transform 0.35s cubic-bezier(.32,.72,0,1); }
+    .modal-sheet.open { transform: translateY(0); }
+    .scroll-x { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .scroll-x::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body class="bg-surface text-on-surface font-inter overflow-x-hidden">
@@ -59,7 +68,7 @@
   <!-- Top bar -->
   <header class="fixed top-0 inset-x-0 z-50 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10">
     <div class="max-w-2xl mx-auto h-full px-6 flex items-center justify-between">
-      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">Recipes</span>
       <a href="profile.html" class="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dim flex items-center justify-center shadow-sm ring-2 ring-primary-container active:scale-95 transition-transform">
         <span class="material-symbols-outlined text-on-primary" style="font-size:19px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">person</span>
       </a>
@@ -67,52 +76,20 @@
   </header>
 
   <!-- Main content -->
-  <main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
-
-    <!-- Page heading -->
-    <div class="mb-5">
-      <h1 class="font-manrope font-bold text-2xl text-on-surface">Recipes</h1>
-      <p class="text-sm text-on-surface-variant mt-1">Based on your list &amp; preferences</p>
-    </div>
-
-    <!-- Search bar -->
-    <div class="relative mb-5">
-      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size:18px">search</span>
-      <input type="text" placeholder="Search recipes..." class="w-full h-12 bg-surface-container-lowest rounded-xl pl-10 pr-4 text-sm text-on-surface placeholder-on-surface-variant/50 outline-none border border-outline-variant/20 focus:border-primary/40 transition-colors">
-    </div>
+  <main class="pt-20 pb-32 max-w-2xl mx-auto">
 
     <!-- Filter chips -->
-    <div class="flex gap-2 overflow-x-auto pb-1 mb-6 -mx-6 px-6" style="scrollbar-width:none">
-      <button onclick="setFilter(this)" class="filter-chip active flex-shrink-0 px-4 py-2 rounded-full bg-primary text-on-primary text-xs font-semibold transition-all duration-200 active:scale-95">All</button>
-      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">🌱 Vegan</button>
-      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">⚡ Quick</button>
-      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">💰 Budget</button>
-      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">💪 High Protein</button>
-      <button onclick="setFilter(this)" class="filter-chip flex-shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs font-medium hover:border-primary/30 transition-all duration-200 active:scale-95">🫀 Heart Healthy</button>
+    <div class="scroll-x flex gap-2 pb-2 px-6 mt-4 mb-5">
+      <button onclick="setFilter('all',this)" class="filter-chip chip-active flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all active:scale-95">All</button>
+      <button onclick="setFilter('vegan',this)" class="filter-chip chip-inactive flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all active:scale-95">🌱 Vegan</button>
+      <button onclick="setFilter('vegetarian',this)" class="filter-chip chip-inactive flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all active:scale-95">🥚 Vegetarian</button>
+      <button onclick="setFilter('keto',this)" class="filter-chip chip-inactive flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all active:scale-95">🥑 Keto</button>
+      <button onclick="setFilter('meat-heavy',this)" class="filter-chip chip-inactive flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all active:scale-95">🥩 Meat</button>
+      <button onclick="setFilter('pescatarian',this)" class="filter-chip chip-inactive flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all active:scale-95">🐟 Pescatarian</button>
     </div>
 
-    <!-- AI match banner -->
-    <div class="flex items-center gap-2 bg-secondary-container/20 rounded-xl px-4 py-3 mb-5 border border-secondary/10">
-      <span class="material-symbols-outlined text-primary" style="font-size:18px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
-      <p class="text-xs text-on-surface-variant leading-snug flex-1">Recipes are ranked by how well they match ingredients in <span class="font-semibold text-on-surface">your current list</span>.</p>
-    </div>
-
-    <!-- Recipe list -->
-    <div id="recipe-list" class="space-y-4">
-      <!-- Skeleton loaders -->
-      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row animate-pulse" style="min-height:128px">
-        <div class="w-28 flex-shrink-0 bg-surface-container"></div>
-        <div class="p-4 flex-1"><div class="h-3 bg-surface-container rounded mb-2 w-3/4"></div><div class="h-3 bg-surface-container rounded w-1/2 mb-4"></div><div class="h-3 bg-surface-container rounded w-1/3"></div></div>
-      </div>
-      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row animate-pulse" style="min-height:128px">
-        <div class="w-28 flex-shrink-0 bg-surface-container"></div>
-        <div class="p-4 flex-1"><div class="h-3 bg-surface-container rounded mb-2 w-3/4"></div><div class="h-3 bg-surface-container rounded w-1/2 mb-4"></div><div class="h-3 bg-surface-container rounded w-1/3"></div></div>
-      </div>
-      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row animate-pulse" style="min-height:128px">
-        <div class="w-28 flex-shrink-0 bg-surface-container"></div>
-        <div class="p-4 flex-1"><div class="h-3 bg-surface-container rounded mb-2 w-3/4"></div><div class="h-3 bg-surface-container rounded w-1/2 mb-4"></div><div class="h-3 bg-surface-container rounded w-1/3"></div></div>
-      </div>
-    </div>
+    <!-- Recipe grid -->
+    <div id="recipe-grid" class="grid grid-cols-2 gap-4 px-6"></div>
 
   </main>
 
@@ -138,74 +115,271 @@
     </div>
   </nav>
 
+  <!-- Recipe Detail Modal -->
+  <div id="recipe-modal" class="fixed inset-0 z-[100] hidden" onclick="closeModal(event)">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div id="modal-sheet" class="modal-sheet absolute bottom-0 inset-x-0 bg-surface rounded-t-[28px] max-h-[92dvh] overflow-y-auto shadow-2xl max-w-2xl mx-auto" onclick="event.stopPropagation()">
+
+      <!-- Image header -->
+      <div class="relative h-56 overflow-hidden rounded-t-[28px]">
+        <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <button onclick="closeModalBtn()" class="absolute top-4 right-4 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
+          <span class="material-symbols-outlined text-white" style="font-size:20px">close</span>
+        </button>
+        <div id="modal-cat-badge" class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="px-6 py-5">
+        <h2 id="modal-name" class="font-manrope font-extrabold text-2xl text-on-surface mb-1"></h2>
+        <p id="modal-desc" class="text-sm text-on-surface-variant leading-relaxed mb-4"></p>
+
+        <!-- Meta chips -->
+        <div class="flex gap-2 flex-wrap mb-5">
+          <div class="flex items-center gap-1 bg-surface-container px-3 py-1.5 rounded-full">
+            <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">schedule</span>
+            <span id="modal-time" class="text-xs font-semibold text-on-surface"></span>
+          </div>
+          <div class="flex items-center gap-1 bg-surface-container px-3 py-1.5 rounded-full">
+            <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_fire_department</span>
+            <span id="modal-cal" class="text-xs font-semibold text-on-surface"></span>
+          </div>
+          <div class="flex items-center gap-1 bg-surface-container px-3 py-1.5 rounded-full">
+            <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">group</span>
+            <span id="modal-servings" class="text-xs font-semibold text-on-surface"></span>
+          </div>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-manrope font-bold text-base text-on-surface">Ingredients</h3>
+          <span id="modal-found" class="text-xs text-on-surface-variant"></span>
+        </div>
+        <div id="modal-ingredients" class="bg-surface-container-lowest rounded-2xl overflow-hidden divide-y divide-outline-variant/10 shadow-sm mb-6"></div>
+
+        <!-- CTA buttons -->
+        <div class="flex gap-3 pb-2">
+          <button onclick="importAll('list')" class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-primary text-primary font-manrope font-bold text-sm active:scale-[0.98] transition-all">
+            <span class="material-symbols-outlined" style="font-size:18px">checklist</span>
+            Add All to List
+          </button>
+          <button onclick="importAll('cart')" class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-manrope font-bold text-sm shadow-[0_4px_16px_rgba(0,106,53,0.3)] active:scale-[0.98] transition-all">
+            <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">shopping_cart</span>
+            Add All to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="data/grocery.js"></script>
+  <script src="data/recipes.js"></script>
   <script src="js/storage.js"></script>
-  <script src="js/ai-filter.js"></script>
   <script>
-    let allRecipes = [];
+    const CAT_LABELS = {
+      vegan: '🌱 Vegan', vegetarian: '🥚 Vegetarian',
+      keto: '🥑 Keto', 'meat-heavy': '🥩 Meat-Heavy', pescatarian: '🐟 Pescatarian'
+    };
+    const CAT_CLASSES = {
+      vegan: 'cat-vegan', vegetarian: 'cat-vegetarian',
+      keto: 'cat-keto', 'meat-heavy': 'cat-meat-heavy', pescatarian: 'cat-pescatarian'
+    };
+
     let activeFilter = 'all';
+    let currentRecipe = null;
 
-    function recipeCardHTML(recipe) {
-      const chips = recipe.tags.slice(0, 2).map(t =>
-        `<span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">${t}</span>`
-      ).join('');
-      const matchColor = recipe.match >= 85 ? 'bg-primary' : recipe.match >= 70 ? 'bg-secondary' : 'bg-on-surface-variant';
-      return `
-        <div class="recipe-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-row cursor-pointer">
-          <div class="w-28 flex-shrink-0 bg-gradient-to-br from-primary/40 to-secondary/50 flex items-center justify-center text-4xl relative" style="min-height:128px">
-            ${recipe.emoji}
-            <span class="absolute top-2 left-2 text-xs font-bold ${matchColor} text-on-primary px-2 py-0.5 rounded-full">${recipe.match}%</span>
+    // ── Render grid ────────────────────────────────────────────────────────────
+    function renderGrid() {
+      const recipes = window.RECIPES_V2 || [];
+      const filtered = activeFilter === 'all' ? recipes : recipes.filter(r => r.category === activeFilter);
+      const grid = document.getElementById('recipe-grid');
+      if (!filtered.length) {
+        grid.innerHTML = '<p class="col-span-2 text-center text-sm text-on-surface-variant py-10">No recipes in this category.</p>';
+        return;
+      }
+      grid.innerHTML = filtered.map(r => `
+        <div class="recipe-card bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm cursor-pointer active:scale-[0.97] transition-transform duration-150" onclick="openRecipe('${r.id}')">
+          <div class="relative h-36 overflow-hidden bg-surface-container">
+            <img src="${r.image}" alt="${r.name}"
+              class="recipe-img w-full h-full object-cover"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="hidden absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/50 items-center justify-center text-4xl">${r.emoji}</div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${CAT_CLASSES[r.category]}">${CAT_LABELS[r.category]}</div>
           </div>
-          <div class="p-4 flex flex-col justify-between flex-1 min-w-0">
-            <div>
-              <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-2">${recipe.name}</h3>
-              <div class="flex flex-wrap gap-1.5 mb-2">
-                ${chips}
-                <span class="bg-tertiary-container/30 text-tertiary text-xs px-2 py-0.5 rounded-full font-medium">${recipe.time} min</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-primary" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">auto_awesome</span>
-                <span class="text-xs font-semibold text-primary">${recipe.match}% ingredient match</span>
-              </div>
-              <button class="text-xs font-bold text-primary hover:text-primary-dim transition-colors">View</button>
+          <div class="p-3">
+            <h3 class="font-manrope font-bold text-sm text-on-surface leading-snug mb-1.5">${r.name}</h3>
+            <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+              <span class="flex items-center gap-0.5">
+                <span class="material-symbols-outlined" style="font-size:13px">schedule</span>${r.time}m
+              </span>
+              <span>·</span>
+              <span>${r.calories} cal</span>
+              <span>·</span>
+              <span>${r.ingredients.length} items</span>
             </div>
           </div>
-        </div>`;
+        </div>
+      `).join('');
     }
 
-    function renderRecipes() {
-      const filtered = activeFilter === 'all'
-        ? allRecipes
-        : allRecipes.filter(r => r.tags.some(t => t.toLowerCase().includes(activeFilter)));
-
-      const list = document.getElementById('recipe-list');
-      list.innerHTML = filtered.length
-        ? filtered.map(recipeCardHTML).join('')
-        : '<p class="text-sm text-on-surface-variant text-center py-8">No recipes match this filter.</p>';
-    }
-
-    function setFilter(el) {
+    // ── Filter chips ───────────────────────────────────────────────────────────
+    function setFilter(cat, el) {
+      activeFilter = cat;
       document.querySelectorAll('.filter-chip').forEach(c => {
-        c.classList.remove('active', 'bg-primary', 'text-on-primary');
-        c.classList.add('bg-surface-container-lowest', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
+        c.classList.remove('chip-active');
+        c.classList.add('chip-inactive');
       });
-      el.classList.add('active', 'bg-primary', 'text-on-primary');
-      el.classList.remove('bg-surface-container-lowest', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
-      activeFilter = el.textContent.trim().replace(/^[^\w]*/,'').toLowerCase().split(' ')[0];
-      if (el.textContent.includes('All')) activeFilter = 'all';
-      renderRecipes();
+      el.classList.remove('chip-inactive');
+      el.classList.add('chip-active');
+      renderGrid();
     }
 
-    async function init() {
-      const profile = Storage.get();
-      const apiKey = Storage.getApiKey();
-      allRecipes = await AIFilter.getRecipes(profile, apiKey, 15);
-      renderRecipes();
+    // ── Find grocery DB match ──────────────────────────────────────────────────
+    function findDBItem(searchTerm) {
+      const db = window.GROCERY_DB;
+      if (!db || !db.items) return null;
+      const s = searchTerm.toLowerCase();
+      return db.items.find(i => i.name.toLowerCase().includes(s)) || null;
     }
 
-    window.GROCERY_DB_READY.then(init);
+    // ── Open recipe modal ──────────────────────────────────────────────────────
+    function openRecipe(id) {
+      const recipe = (window.RECIPES_V2 || []).find(r => r.id === id);
+      if (!recipe) return;
+      currentRecipe = recipe;
+
+      document.getElementById('modal-img').src = recipe.image;
+      document.getElementById('modal-img').alt = recipe.name;
+      document.getElementById('modal-name').textContent = recipe.name;
+      document.getElementById('modal-desc').textContent = recipe.description;
+      document.getElementById('modal-time').textContent = recipe.time + ' min';
+      document.getElementById('modal-cal').textContent = recipe.calories + ' cal';
+      document.getElementById('modal-servings').textContent = recipe.servings + ' servings';
+
+      const catBadge = document.getElementById('modal-cat-badge');
+      catBadge.textContent = CAT_LABELS[recipe.category];
+      catBadge.className = 'absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ' + CAT_CLASSES[recipe.category];
+
+      // Build ingredient list
+      const matched = recipe.ingredients.map(ing => ({
+        ...ing, dbItem: findDBItem(ing.search)
+      }));
+      const foundCount = matched.filter(i => i.dbItem).length;
+      document.getElementById('modal-found').textContent = `${foundCount}/${matched.length} in store`;
+
+      document.getElementById('modal-ingredients').innerHTML = matched.map((ing, idx) => {
+        const item = ing.dbItem;
+        return `
+          <div class="flex items-center gap-3 p-4">
+            <span class="text-2xl flex-shrink-0">${item ? item.emoji : '🛒'}</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-on-surface">${item ? item.name : ing.display}</p>
+              <p class="text-xs text-on-surface-variant">${ing.amount}${item ? ' · $' + item.price.toFixed(2) : ' · not in store'}</p>
+            </div>
+            ${item ? `
+            <div class="flex gap-1.5 flex-shrink-0">
+              <button id="ing-list-${idx}" onclick="addIngToList(${idx},'${item.id}')" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary-container/40 active:scale-90 transition-all" title="Add to list">
+                <span class="material-symbols-outlined" style="font-size:15px">checklist</span>
+              </button>
+              <button id="ing-cart-${idx}" onclick="addIngToCart(${idx},'${item.id}')" class="w-8 h-8 rounded-full bg-primary-container/30 flex items-center justify-center text-primary hover:bg-primary-container active:scale-90 transition-all" title="Add to cart">
+                <span class="material-symbols-outlined" style="font-size:15px">shopping_cart</span>
+              </button>
+            </div>` : `<span class="text-xs text-on-surface-variant/50 flex-shrink-0">Not available</span>`}
+          </div>`;
+      }).join('');
+
+      // Show modal
+      document.getElementById('recipe-modal').classList.remove('hidden');
+      requestAnimationFrame(() => {
+        document.getElementById('modal-sheet').classList.add('open');
+      });
+    }
+
+    function addIngToList(idx, itemId) {
+      const list = JSON.parse(localStorage.getItem('opticart_list') || '[]');
+      if (!list.includes(itemId)) { list.push(itemId); localStorage.setItem('opticart_list', JSON.stringify(list)); }
+      const btn = document.getElementById('ing-list-' + idx);
+      if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-primary" style="font-size:15px;font-variation-settings:\'FILL\' 1,\'wght\' 600,\'GRAD\' 0,\'opsz\' 24">check</span>'; btn.classList.add('bg-primary-container'); }
+    }
+
+    function addIngToCart(idx, itemId) {
+      const db = window.GROCERY_DB;
+      const item = db && db.items.find(i => i.id === itemId);
+      if (!item) return;
+      const cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+      const existing = cart.find(i => i.id === itemId);
+      if (existing) { existing.qty++; } else { cart.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qty: 1 }); }
+      localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      const btn = document.getElementById('ing-cart-' + idx);
+      if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-primary" style="font-size:15px;font-variation-settings:\'FILL\' 1,\'wght\' 600,\'GRAD\' 0,\'opsz\' 24">check</span>'; btn.classList.add('bg-primary-container'); }
+    }
+
+    // ── Import all ingredients ─────────────────────────────────────────────────
+    function importAll(destination) {
+      if (!currentRecipe) return;
+      let added = 0;
+
+      if (destination === 'list') {
+        const list = JSON.parse(localStorage.getItem('opticart_list') || '[]');
+        currentRecipe.ingredients.forEach(ing => {
+          const item = findDBItem(ing.search);
+          if (item && !list.includes(item.id)) { list.push(item.id); added++; }
+        });
+        localStorage.setItem('opticart_list', JSON.stringify(list));
+      } else {
+        const cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+        currentRecipe.ingredients.forEach(ing => {
+          const item = findDBItem(ing.search);
+          if (!item) return;
+          const existing = cart.find(i => i.id === item.id);
+          if (existing) { existing.qty++; } else { cart.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qty: 1 }); }
+          added++;
+        });
+        localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      }
+
+      // Update all ingredient buttons to checked state
+      currentRecipe.ingredients.forEach((_, idx) => {
+        const btn = document.getElementById(destination === 'list' ? 'ing-list-' + idx : 'ing-cart-' + idx);
+        if (btn) { btn.innerHTML = '<span class="material-symbols-outlined text-primary" style="font-size:15px;font-variation-settings:\'FILL\' 1,\'wght\' 600,\'GRAD\' 0,\'opsz\' 24">check</span>'; btn.classList.add('bg-primary-container'); }
+      });
+
+      // Show confirmation banner
+      const dest = destination === 'list' ? 'list' : 'cart';
+      showBanner(`${added} ingredient${added !== 1 ? 's' : ''} added to your ${dest}!`, destination);
+    }
+
+    function showBanner(msg, dest) {
+      let b = document.getElementById('import-banner');
+      if (!b) {
+        b = document.createElement('div');
+        b.id = 'import-banner';
+        b.className = 'fixed bottom-6 inset-x-6 max-w-sm mx-auto rounded-2xl px-5 py-3.5 text-sm font-semibold text-center z-[200] shadow-xl flex items-center justify-between gap-3 transition-all duration-300';
+        document.body.appendChild(b);
+      }
+      b.innerHTML = `<span>${msg}</span><a href="${dest === 'list' ? 'lists' : 'cart'}.html" class="underline underline-offset-2 font-bold flex-shrink-0">View →</a>`;
+      b.className = b.className.replace(/bg-\S+/g, '');
+      b.classList.add(dest === 'list' ? 'bg-primary' : 'bg-on-surface', dest === 'list' ? 'text-on-primary' : 'text-surface');
+      b.style.opacity = '1';
+      clearTimeout(b._t);
+      b._t = setTimeout(() => b.style.opacity = '0', 3500);
+    }
+
+    // ── Close modal ────────────────────────────────────────────────────────────
+    function closeModal(e) {
+      if (e.target === document.getElementById('recipe-modal')) closeModalBtn();
+    }
+    function closeModalBtn() {
+      document.getElementById('modal-sheet').classList.remove('open');
+      setTimeout(() => document.getElementById('recipe-modal').classList.add('hidden'), 350);
+    }
+
+    // ── Init ───────────────────────────────────────────────────────────────────
+    (function tryInit(n) {
+      if (window.RECIPES_V2) { renderGrid(); }
+      else if (n > 0) { setTimeout(() => tryInit(n - 1), 200); }
+    })(15);
   </script>
 
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
