@@ -1,4 +1,4 @@
-const CACHE = 'opticart-v10';
+const CACHE = 'opticart-v11';
 const ASSETS = [
   './intro.html',
   './signup.html',
