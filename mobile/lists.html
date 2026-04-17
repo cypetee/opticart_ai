@@ -97,6 +97,15 @@
       <span class="text-xs text-on-surface-variant font-medium" id="progress-cost">$0.00 est.</span>
     </div>
 
+    <!-- Quick Add -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-manrope font-bold text-sm text-on-surface uppercase tracking-wide">Quick Add</h2>
+        <span class="text-xs text-on-surface-variant">Tap to add</span>
+      </div>
+      <div id="quick-add-row" class="flex flex-wrap gap-2"></div>
+    </div>
+
     <!-- Dynamic category sections -->
     <div id="list-categories"></div>
 
@@ -238,6 +247,7 @@
 
       document.getElementById('list-categories').innerHTML = html;
       updateProgress();
+      renderQuickAdd();
     }
 
     function toggleItem(row, itemId) {
@@ -304,6 +314,58 @@
       }
       input.value = '';
       hideAddModal();
+    }
+
+    // ── Quick Add ──────────────────────────────────────────────────────────────
+    const QUICK_ADD_NAMES = [
+      'Eggs','Bananas','Bread','Milk','Butter','Chicken Breast','Pasta',
+      'Rice','Onions','Apples','Greek Yogurt','Cheddar Cheese','Orange Juice',
+      'Coffee','Olive Oil','Tomatoes','Potatoes','Carrots','Spinach','Oat Milk',
+      'Avocado','Blueberries','Salmon','Broccoli','Garlic'
+    ];
+
+    function renderQuickAdd() {
+      const db = window.GROCERY_DB;
+      if (!db) return;
+
+      const chips = QUICK_ADD_NAMES.map(name => {
+        const item = db.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
+        return item || null;
+      }).filter(Boolean);
+
+      document.getElementById('quick-add-row').innerHTML = chips.map(item => {
+        const inList = listIds.includes(item.id);
+        return `
+          <button
+            id="qchip-${item.id}"
+            onclick="quickAdd('${item.id}')"
+            class="quick-chip flex items-center gap-1.5 px-3 py-2 rounded-full border text-xs font-semibold transition-all duration-200 active:scale-95 ${
+              inList
+                ? 'bg-primary border-primary text-on-primary cursor-default'
+                : 'bg-surface-container-lowest border-outline-variant/30 text-on-surface hover:border-primary/40 hover:bg-primary-container/20'
+            }">
+            <span style="font-size:15px">${item.emoji}</span>
+            ${item.name}
+            ${inList ? '<span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:\'FILL\' 1,\'wght\' 600,\'GRAD\' 0,\'opsz\' 24">check</span>' : ''}
+          </button>`;
+      }).join('');
+    }
+
+    function quickAdd(itemId) {
+      const btn = document.getElementById('qchip-' + itemId);
+      if (!btn || listIds.includes(itemId)) return;
+
+      listIds.push(itemId);
+      saveState();
+      renderList();
+
+      // Animate chip to added state
+      btn.className = 'quick-chip flex items-center gap-1.5 px-3 py-2 rounded-full border text-xs font-semibold bg-primary border-primary text-on-primary cursor-default transition-all duration-200';
+      const db = window.GROCERY_DB;
+      const item = db && db.items.find(i => i.id === itemId);
+      if (item) {
+        btn.innerHTML = `<span style="font-size:15px">${item.emoji}</span>${item.name}<span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>`;
+      }
     }
 
     // Seed list with AI-personalized items if empty
