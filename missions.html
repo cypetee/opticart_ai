@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>OptiCart — Missions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OptiCart">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { manrope: ['Manrope', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: "#006a35", "primary-dim": "#005c2d", "primary-container": "#75f39c",
+            "on-primary": "#cdffd4", secondary: "#006946", "secondary-container": "#72fbbd",
+            "on-secondary-container": "#005e3e", surface: "#f6f6f9",
+            "surface-container-lowest": "#ffffff", "surface-container-low": "#f0f0f3",
+            "surface-container": "#e7e8eb", "surface-container-high": "#e1e2e6",
+            "surface-container-highest": "#dbdde0", "on-surface": "#2d2f31",
+            "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
+            tertiary: "#006576", "tertiary-container": "#00dcff",
+            "error-container": "#ffdad6", "on-error-container": "#410002",
+            error: "#b31b25",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { min-height: max(884px, 100dvh); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+    .nav-tab-active { background-color: #72fbbd; color: #005e3e; border-radius: 1rem; }
+    .nav-tab-inactive { color: #5a5c5e; }
+
+    /* Scanning animation */
+    @keyframes scan-line {
+      0%, 100% { top: 12px; }
+      50% { top: calc(100% - 16px); }
+    }
+    .scan-line { animation: scan-line 2.5s ease-in-out infinite; }
+
+    /* Mic pulse */
+    @keyframes mic-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,106,53,0.35); }
+      50% { box-shadow: 0 0 0 16px rgba(0,106,53,0); }
+    }
+    .mic-pulse { animation: mic-pulse 2s ease-in-out infinite; }
+
+    .chip { transition: all 0.2s; }
+    .scroll-x { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .scroll-x::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-inter overflow-x-hidden">
+
+  <!-- Background blobs -->
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-80 h-80 bg-primary-container/20 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/2 -left-32 w-64 h-64 bg-secondary-container/15 rounded-full blur-[100px]"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="fixed top-0 inset-x-0 z-50 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/10">
+    <div class="max-w-2xl mx-auto h-full px-6 flex items-center justify-between">
+      <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors duration-200 active:scale-95">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="pt-20 pb-32 px-6 max-w-2xl mx-auto">
+
+    <!-- Page heading -->
+    <div class="mt-4 mb-6">
+      <h1 class="font-manrope font-extrabold text-3xl text-on-surface tracking-tight leading-tight">Add to My Mission</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Input your needs via photo, voice, or text.</p>
+    </div>
+
+    <!-- ── Snap a Photo Card ── -->
+    <div class="relative rounded-2xl overflow-hidden mb-4 cursor-pointer active:scale-[0.98] transition-transform duration-150" onclick="snapPhoto()" style="min-height:180px">
+      <!-- Fridge gradient background -->
+      <div class="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary-dim/70 to-secondary/80"></div>
+      <!-- Decorative produce emoji layer -->
+      <div class="absolute inset-0 flex items-center justify-around opacity-20 text-5xl select-none pointer-events-none px-4">
+        <span>🥬</span><span>🍎</span><span>🥕</span><span>🥛</span><span>🍳</span>
+      </div>
+      <!-- Scan frame corners -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="relative w-28 h-28">
+          <div class="absolute -top-0.5 -left-0.5 w-6 h-6 border-t-[3px] border-l-[3px] border-white rounded-tl-lg"></div>
+          <div class="absolute -top-0.5 -right-0.5 w-6 h-6 border-t-[3px] border-r-[3px] border-white rounded-tr-lg"></div>
+          <div class="absolute -bottom-0.5 -left-0.5 w-6 h-6 border-b-[3px] border-l-[3px] border-white rounded-bl-lg"></div>
+          <div class="absolute -bottom-0.5 -right-0.5 w-6 h-6 border-b-[3px] border-r-[3px] border-white rounded-br-lg"></div>
+          <!-- Scan line -->
+          <div class="scan-line absolute left-1 right-1 h-0.5 bg-white/70 rounded-full"></div>
+        </div>
+      </div>
+      <!-- Content overlay -->
+      <div class="relative z-10 p-5 flex items-end h-full" style="min-height:180px">
+        <div class="mt-auto">
+          <div class="flex items-center gap-2 mb-1">
+            <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-white" style="font-size:18px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">photo_camera</span>
+            </div>
+            <h2 class="font-manrope font-extrabold text-lg text-white tracking-tight">Snap a Photo</h2>
+          </div>
+          <p class="text-white/80 text-xs font-medium">Scan your fridge or receipt instantly</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Voice Input ── -->
+    <div class="bg-surface-container-lowest rounded-2xl p-5 mb-4 flex items-center gap-4 shadow-sm" id="voice-card">
+      <button
+        id="mic-btn"
+        onclick="toggleVoice()"
+        class="mic-pulse w-14 h-14 rounded-full bg-primary flex items-center justify-center flex-shrink-0 active:scale-95 transition-transform"
+      >
+        <span class="material-symbols-outlined text-on-primary" style="font-size:26px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">mic</span>
+      </button>
+      <div class="flex-1 min-w-0">
+        <p class="font-manrope font-bold text-sm text-on-surface mb-0.5">Tell OptiCart</p>
+        <p class="text-xs text-on-surface-variant italic truncate" id="voice-transcript">"I need organic milk and three avocados"</p>
+      </div>
+    </div>
+
+    <!-- ── Text Input ── -->
+    <div class="mb-4">
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size:18px">search</span>
+        <input
+          id="item-input"
+          type="text"
+          placeholder="Type items manually..."
+          class="w-full h-12 bg-surface-container-lowest rounded-xl pl-10 pr-20 text-sm text-on-surface placeholder-on-surface-variant/50 outline-none border border-outline-variant/20 focus:border-primary/40 transition-colors shadow-sm"
+          onkeydown="if(event.key==='Enter')addTyped()"
+        >
+        <button onclick="addTyped()" class="absolute right-2 top-1/2 -translate-y-1/2 h-8 px-3 bg-primary text-on-primary text-xs font-bold rounded-lg hover:bg-primary-dim transition-colors active:scale-95">Add</button>
+      </div>
+
+      <!-- Suggestion chips -->
+      <div class="scroll-x flex gap-2 mt-3 pb-0.5">
+        <span class="text-xs text-on-surface-variant font-semibold self-center flex-shrink-0">Suggested:</span>
+        <button onclick="addChip(this,'Apples')" class="chip flex-shrink-0 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary active:scale-95">🍎 Apples</button>
+        <button onclick="addChip(this,'Yogurt')" class="chip flex-shrink-0 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary active:scale-95">🫙 Yogurt</button>
+        <button onclick="addChip(this,'Eggs')" class="chip flex-shrink-0 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary active:scale-95">🥚 Eggs</button>
+        <button onclick="addChip(this,'Spinach')" class="chip flex-shrink-0 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary active:scale-95">🥬 Spinach</button>
+        <button onclick="addChip(this,'Oat Milk')" class="chip flex-shrink-0 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-xs font-semibold text-on-surface-variant hover:border-primary/40 hover:text-primary active:scale-95">🥛 Oat Milk</button>
+      </div>
+    </div>
+
+    <!-- ── AI Missing Items ── -->
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <span class="inline-block bg-primary-container text-on-surface text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest mb-1">AI Insight</span>
+          <h2 class="font-manrope font-bold text-base text-on-surface">Identified Missing Items</h2>
+        </div>
+        <button class="text-primary font-semibold text-xs flex items-center gap-0.5">View all <span class="material-symbols-outlined" style="font-size:14px">arrow_forward</span></button>
+      </div>
+
+      <div id="missing-items" class="space-y-2">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ── Current Cart ── -->
+    <div class="mb-5" id="cart-section" style="display:none">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary" style="font-size:18px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">shopping_cart</span>
+          <h2 class="font-manrope font-bold text-base text-on-surface">Current Cart</h2>
+          <span class="bg-primary text-on-primary text-xs font-bold px-2 py-0.5 rounded-full" id="cart-count">0</span>
+        </div>
+        <button onclick="clearCart()" class="text-xs font-semibold text-on-surface-variant border border-outline-variant/30 rounded-full px-3 py-1 hover:border-primary/40 hover:text-primary transition-all active:scale-95">Clear all</button>
+      </div>
+      <div id="cart-items" class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm divide-y divide-outline-variant/10"></div>
+    </div>
+
+    <!-- ── Weekly Mission Progress ── -->
+    <div class="bg-surface-container-high rounded-2xl p-5 mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-manrope font-bold text-sm text-on-surface">Weekly Mission</h3>
+        <span class="text-primary font-bold text-sm" id="mission-pct">0% Complete</span>
+      </div>
+      <div class="h-2.5 w-full bg-surface-container-highest rounded-full overflow-hidden mb-2">
+        <div class="h-full bg-gradient-to-r from-primary to-secondary-container rounded-full transition-all duration-500" id="mission-bar" style="width:0%"></div>
+      </div>
+      <p class="text-on-surface-variant text-xs font-medium" id="mission-hint">Add items to start your mission!</p>
+    </div>
+
+    <!-- ── Generate Mission Plan ── -->
+    <button onclick="generatePlan()" class="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-manrope font-bold text-base shadow-[0_8px_32px_rgba(0,106,53,0.25)] active:scale-[0.98] transition-all duration-200">
+      <span class="material-symbols-outlined" style="font-size:20px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">rocket_launch</span>
+      Generate Mission Plan
+    </button>
+
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white rounded-t-[24px] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] px-8 pb-8 pt-4 z-50">
+    <div class="max-w-2xl mx-auto flex items-center justify-around">
+      <a href="lists.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">checklist</span>
+        <span class="text-xs font-medium">Lists</span>
+      </a>
+      <a href="missions.html" class="nav-tab-active flex items-center gap-1.5 px-4 py-2 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">assignment_turned_in</span>
+        <span class="text-xs font-semibold">Missions</span>
+      </a>
+      <a href="deals.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">local_offer</span>
+        <span class="text-xs font-medium">Deals</span>
+      </a>
+      <a href="cart.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95 relative">
+        <span class="material-symbols-outlined" style="font-size:22px">shopping_cart</span>
+        <span class="text-xs font-medium">Cart</span>
+        <span id="nav-cart-badge" class="absolute top-0 right-1 w-4 h-4 bg-primary text-on-primary text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+      </a>
+    </div>
+  </nav>
+
+  <script src="data/grocery.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ai-filter.js"></script>
+  <script>
+    // ── Cart state ────────────────────────────────────────
+    let cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+    // cart = [{id, name, emoji, price, qty}]
+
+    function saveCart() {
+      localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      renderCart();
+      updateMission();
+      updateNavBadge();
+    }
+
+    function addToCart(id, name, emoji, price) {
+      const existing = cart.find(i => i.id === id);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ id, name, emoji, price, qty: 1 });
+      }
+      saveCart();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+    }
+
+    function clearCart() {
+      cart = [];
+      saveCart();
+    }
+
+    // ── Missing items ──────────────────────────────────────
+    const MISSING = [
+      { id: 'D001', emoji: '🥛', name: 'Organic Whole Milk', status: 'warning', label: 'Low on Milk', sub: '~10% remaining' },
+      { id: 'D018', emoji: '🥚', name: 'Free-Range Eggs', status: 'cancel',  label: 'No eggs detected', sub: 'Scan: 0 items' },
+      { id: 'P018', emoji: '🥕', name: 'Organic Carrots', status: 'info',    label: 'Low: Carrots', sub: 'Out in 2 days' },
+    ];
+    const STATUS_COLORS = {
+      warning: 'text-error',
+      cancel:  'text-error',
+      info:    'text-tertiary',
+    };
+
+    function renderMissingItems() {
+      const db = window.GROCERY_DB;
+      const container = document.getElementById('missing-items');
+      container.innerHTML = MISSING.map(item => {
+        const dbItem = db ? db.items.find(i => i.id === item.id) : null;
+        const price = dbItem ? dbItem.price : 0;
+        return `
+          <div class="bg-surface-container-low rounded-2xl p-3 flex items-center gap-3">
+            <div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center text-3xl flex-shrink-0">${item.emoji}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1 mb-0.5">
+                <span class="material-symbols-outlined ${STATUS_COLORS[item.status]}" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">${item.status}</span>
+                <p class="font-bold text-sm text-on-surface">${item.label}</p>
+              </div>
+              <p class="text-on-surface-variant text-xs">${item.sub}</p>
+            </div>
+            <button
+              onclick="addToCart('${item.id}','${item.name}','${item.emoji}',${price}); this.textContent='Added ✓'; this.classList.add('bg-primary','text-on-primary'); this.classList.remove('bg-surface-container-lowest','text-primary');"
+              class="flex-shrink-0 px-3 py-2 bg-surface-container-lowest text-primary border border-outline-variant/20 rounded-xl text-xs font-bold hover:bg-primary hover:text-on-primary transition-all active:scale-95"
+            >Add to Cart</button>
+          </div>`;
+      }).join('');
+    }
+
+    // ── Render cart ────────────────────────────────────────
+    function renderCart() {
+      const section = document.getElementById('cart-section');
+      const container = document.getElementById('cart-items');
+      const countEl = document.getElementById('cart-count');
+
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      countEl.textContent = total;
+
+      if (cart.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+      section.style.display = '';
+      container.innerHTML = cart.map(item => `
+        <div class="flex items-center gap-3 px-4 py-3">
+          <span class="text-2xl flex-shrink-0">${item.emoji}</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-on-surface truncate">${item.name}</p>
+            <p class="text-xs text-on-surface-variant">$${item.price.toFixed(2)} · qty ${item.qty}</p>
+          </div>
+          <button onclick="removeFromCart('${item.id}')" class="text-on-surface-variant hover:text-error transition-colors active:scale-95">
+            <span class="material-symbols-outlined" style="font-size:18px">close</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // ── Mission progress ───────────────────────────────────
+    const MISSION_TARGET = 10;
+    function updateMission() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const pct = Math.min(Math.round((total / MISSION_TARGET) * 100), 100);
+      document.getElementById('mission-bar').style.width = pct + '%';
+      document.getElementById('mission-pct').textContent = pct + '% Complete';
+      const remaining = Math.max(MISSION_TARGET - total, 0);
+      document.getElementById('mission-hint').textContent = remaining > 0
+        ? `Add ${remaining} more item${remaining !== 1 ? 's' : ''} to unlock 15% off!`
+        : 'Mission complete! 🎉 15% off applied at checkout.';
+    }
+
+    // ── Nav badge ──────────────────────────────────────────
+    function updateNavBadge() {
+      const badge = document.getElementById('nav-cart-badge');
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      if (total > 0) {
+        badge.textContent = total > 9 ? '9+' : total;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    // ── Add typed item ─────────────────────────────────────
+    function addTyped() {
+      const input = document.getElementById('item-input');
+      const val = input.value.trim();
+      if (!val) return;
+      const db = window.GROCERY_DB;
+      const match = db ? db.items.find(i => i.name.toLowerCase().includes(val.toLowerCase())) : null;
+      if (match) {
+        addToCart(match.id, match.name, match.emoji, match.price);
+      } else {
+        addToCart('custom_' + Date.now(), val, '🛒', 0);
+      }
+      input.value = '';
+    }
+
+    function addChip(btn, name) {
+      const db = window.GROCERY_DB;
+      const match = db ? db.items.find(i => i.name.toLowerCase().includes(name.toLowerCase())) : null;
+      if (match) {
+        addToCart(match.id, match.name, match.emoji, match.price);
+      } else {
+        addToCart('chip_' + name, name, '🛒', 0);
+      }
+      btn.classList.add('bg-primary-container', 'text-on-surface', 'border-primary/30');
+      btn.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+    }
+
+    // ── Voice simulation ───────────────────────────────────
+    let voiceActive = false;
+    const VOICE_SAMPLES = [
+      '"I need organic milk and three avocados"',
+      '"Add Greek yogurt and sourdough bread"',
+      '"Put eggs and spinach on my list"',
+      '"I\'m running low on olive oil and pasta"',
+    ];
+    function toggleVoice() {
+      voiceActive = !voiceActive;
+      const btn = document.getElementById('mic-btn');
+      const transcript = document.getElementById('voice-transcript');
+      if (voiceActive) {
+        btn.classList.add('bg-error', 'animate-pulse');
+        btn.classList.remove('bg-primary');
+        transcript.textContent = 'Listening...';
+        setTimeout(() => {
+          transcript.textContent = VOICE_SAMPLES[Math.floor(Math.random() * VOICE_SAMPLES.length)];
+          voiceActive = false;
+          btn.classList.remove('bg-error', 'animate-pulse');
+          btn.classList.add('bg-primary');
+        }, 2200);
+      }
+    }
+
+    // ── Snap photo simulation ──────────────────────────────
+    function snapPhoto() {
+      // In a real app, this would open the camera
+      const items = ['Organic Whole Milk', 'Eggs', 'Cheddar Cheese'];
+      items.forEach((name, i) => {
+        setTimeout(() => {
+          const db = window.GROCERY_DB;
+          const match = db ? db.items.find(it => it.name.toLowerCase().includes(name.toLowerCase())) : null;
+          if (match) addToCart(match.id, match.name, match.emoji, match.price);
+        }, i * 300);
+      });
+    }
+
+    // ── Generate plan ──────────────────────────────────────
+    function generatePlan() {
+      if (cart.length === 0) {
+        alert('Add some items to your cart first!');
+        return;
+      }
+      window.location.href = 'cart.html';
+    }
+
+    // ── Init ───────────────────────────────────────────────
+    renderMissingItems();
+    renderCart();
+    updateMission();
+    updateNavBadge();
+  </script>
+
+  <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
+</body>
+</html>

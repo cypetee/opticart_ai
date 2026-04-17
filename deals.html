@@ -147,17 +147,17 @@
         <span class="material-symbols-outlined" style="font-size:22px">checklist</span>
         <span class="text-xs font-medium">Lists</span>
       </a>
+      <a href="missions.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">assignment_turned_in</span>
+        <span class="text-xs font-medium">Missions</span>
+      </a>
       <a href="deals.html" class="nav-tab-active flex items-center gap-1.5 px-4 py-2 transition-all duration-200 active:scale-95">
         <span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_offer</span>
         <span class="text-xs font-semibold">Deals</span>
       </a>
-      <a href="recipes.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
-        <span class="material-symbols-outlined" style="font-size:22px">restaurant_menu</span>
-        <span class="text-xs font-medium">Recipes</span>
-      </a>
-      <a href="profile.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
-        <span class="material-symbols-outlined" style="font-size:22px">person</span>
-        <span class="text-xs font-medium">Profile</span>
+      <a href="cart.html" class="nav-tab-inactive flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-200 active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:22px">shopping_cart</span>
+        <span class="text-xs font-medium">Cart</span>
       </a>
     </div>
   </nav>
@@ -182,7 +182,7 @@
             <span class="text-xs text-on-surface-variant line-through">$${origPrice.toFixed ? origPrice.toFixed(2) : origPrice}</span>
             <span class="text-sm font-bold text-primary">$${salePrice}</span>
           </div>
-          <button onclick="addToList(this, '${item.id}')" class="w-full text-xs font-semibold bg-primary-container text-on-secondary-container rounded-lg py-2 px-3 hover:opacity-80 transition-all duration-200 active:scale-[0.98]">Add to List</button>
+          <button onclick="addToCart(this, '${item.id}')" class="w-full text-xs font-semibold bg-primary-container text-on-secondary-container rounded-lg py-2 px-3 hover:opacity-80 transition-all duration-200 active:scale-[0.98]">Add to Cart</button>
         </div>`;
     }
 
@@ -209,13 +209,20 @@
         </div>`;
     }
 
-    function addToList(btn, itemId) {
+    function addToCart(btn, itemId) {
       btn.textContent = 'Added ✓';
       btn.classList.add('bg-primary', 'text-on-primary');
       btn.classList.remove('bg-primary-container', 'text-on-secondary-container');
-      // Persist to localStorage list
-      const list = JSON.parse(localStorage.getItem('opticart_list') || '[]');
-      if (!list.includes(itemId)) { list.push(itemId); localStorage.setItem('opticart_list', JSON.stringify(list)); }
+      // Persist to cart
+      const cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+      const existing = cart.find(i => i.id === itemId);
+      if (existing) {
+        existing.qty++;
+      } else {
+        const item = GROCERY_DB.items.find(i => i.id === itemId);
+        if (item) cart.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qty: 1 });
+      }
+      localStorage.setItem('opticart_cart', JSON.stringify(cart));
     }
 
     async function loadDeals() {
