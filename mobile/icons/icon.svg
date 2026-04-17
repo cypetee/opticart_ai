@@ -1,24 +1,86 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Rounded square background -->
-  <rect width="512" height="512" rx="112" fill="#006a35"/>
-  <!-- Soft inner glow -->
-  <rect width="512" height="512" rx="112" fill="url(#glow)" opacity="0.25"/>
   <defs>
-    <radialGradient id="glow" cx="40%" cy="30%" r="60%">
-      <stop offset="0%" stop-color="#75f39c"/>
-      <stop offset="100%" stop-color="#006a35"/>
+    <radialGradient id="bg" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#00a651"/>
+      <stop offset="100%" stop-color="#004d26"/>
     </radialGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#c8ffd9" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
-  <!-- Shopping bag body -->
-  <path d="M168 222 L192 378 Q194 398 214 398 L298 398 Q318 398 320 378 L344 222 Z"
-        fill="white" opacity="0.95"/>
-  <!-- Bag handle -->
-  <path d="M210 222 Q210 158 256 158 Q302 158 302 222"
-        fill="none" stroke="white" stroke-width="24" stroke-linecap="round" opacity="0.95"/>
-  <!-- Leaf accent inside bag -->
-  <path d="M220 298 Q256 252 292 298 Q256 344 220 298 Z" fill="#75f39c"/>
-  <!-- Small sparkle dots -->
-  <circle cx="360" cy="155" r="10" fill="#75f39c" opacity="0.7"/>
-  <circle cx="385" cy="130" r="6" fill="#75f39c" opacity="0.5"/>
-  <circle cx="340" cy="128" r="6" fill="#75f39c" opacity="0.4"/>
+
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- Subtle grid lines (tech feel) -->
+  <line x1="0" y1="170" x2="512" y2="170" stroke="#75f39c" stroke-width="1" opacity="0.12"/>
+  <line x1="0" y1="340" x2="512" y2="340" stroke="#75f39c" stroke-width="1" opacity="0.12"/>
+  <line x1="170" y1="0" x2="170" y2="512" stroke="#75f39c" stroke-width="1" opacity="0.12"/>
+  <line x1="340" y1="0" x2="340" y2="512" stroke="#75f39c" stroke-width="1" opacity="0.12"/>
+
+  <!-- ── Robot Cart Body ── -->
+
+  <!-- Cart basket (main body) - rounded rect with tech cutouts -->
+  <rect x="148" y="220" width="240" height="160" rx="18" fill="url(#bodyGrad)"/>
+  <!-- Inner panel lines (robot chest plate look) -->
+  <rect x="164" y="236" width="208" height="128" rx="10" fill="none" stroke="#006a35" stroke-width="3" opacity="0.3"/>
+  <line x1="256" y1="236" x2="256" y2="364" stroke="#006a35" stroke-width="2" opacity="0.2"/>
+  <line x1="164" y1="300" x2="372" y2="300" stroke="#006a35" stroke-width="2" opacity="0.2"/>
+
+  <!-- "Eye" indicators on cart body (robot face) -->
+  <rect x="192" y="254" width="44" height="28" rx="8" fill="#006a35" opacity="0.85"/>
+  <rect x="276" y="254" width="44" height="28" rx="8" fill="#006a35" opacity="0.85"/>
+  <!-- Eye glow -->
+  <rect x="199" y="260" width="14" height="10" rx="3" fill="#75f39c" filter="url(#glow)"/>
+  <rect x="283" y="260" width="14" height="10" rx="3" fill="#75f39c" filter="url(#glow)"/>
+
+  <!-- Status bar on cart body -->
+  <rect x="192" y="316" width="128" height="10" rx="5" fill="#e0ffe8" opacity="0.5"/>
+  <rect x="192" y="316" width="82" height="10" rx="5" fill="#006a35" opacity="0.7"/>
+
+  <!-- Cart handle bar (top) - robot arm -->
+  <rect x="164" y="192" width="24" height="36" rx="8" fill="white" opacity="0.9"/>
+  <rect x="324" y="192" width="24" height="36" rx="8" fill="white" opacity="0.9"/>
+  <rect x="164" y="192" width="184" height="20" rx="10" fill="white" opacity="0.9"/>
+  <!-- Handle tech detail -->
+  <rect x="210" y="197" width="32" height="8" rx="4" fill="#75f39c" opacity="0.8"/>
+  <rect x="270" y="197" width="32" height="8" rx="4" fill="#75f39c" opacity="0.8"/>
+
+  <!-- Cart pole/neck -->
+  <rect x="116" y="168" width="20" height="60" rx="6" fill="white" opacity="0.85"/>
+  <!-- Connector node -->
+  <circle cx="126" cy="168" r="10" fill="#75f39c"/>
+
+  <!-- Cart base / undercarriage -->
+  <rect x="132" y="374" width="260" height="18" rx="6" fill="white" opacity="0.7"/>
+
+  <!-- Wheels (mechanical) -->
+  <!-- Left wheel -->
+  <circle cx="186" cy="412" r="28" fill="white" opacity="0.9"/>
+  <circle cx="186" cy="412" r="18" fill="#006a35"/>
+  <circle cx="186" cy="412" r="8" fill="#75f39c"/>
+  <!-- Wheel spokes -->
+  <line x1="186" y1="394" x2="186" y2="430" stroke="white" stroke-width="3"/>
+  <line x1="168" y1="412" x2="204" y2="412" stroke="white" stroke-width="3"/>
+
+  <!-- Right wheel -->
+  <circle cx="326" cy="412" r="28" fill="white" opacity="0.9"/>
+  <circle cx="326" cy="412" r="18" fill="#006a35"/>
+  <circle cx="326" cy="412" r="8" fill="#75f39c"/>
+  <line x1="326" y1="394" x2="326" y2="430" stroke="white" stroke-width="3"/>
+  <line x1="308" y1="412" x2="344" y2="412" stroke="white" stroke-width="3"/>
+
+  <!-- Antenna -->
+  <line x1="126" y1="168" x2="126" y2="120" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+  <circle cx="126" cy="112" r="12" fill="#75f39c" filter="url(#glow)"/>
+  <circle cx="126" cy="112" r="6" fill="white"/>
+
+  <!-- Floating sparkle dots (tech accent) -->
+  <circle cx="390" cy="145" r="7" fill="#75f39c" opacity="0.8"/>
+  <circle cx="412" cy="120" r="4" fill="#75f39c" opacity="0.5"/>
+  <circle cx="370" cy="118" r="4" fill="#75f39c" opacity="0.4"/>
 </svg>
