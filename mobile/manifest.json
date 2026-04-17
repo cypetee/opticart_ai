@@ -2,7 +2,7 @@
   "name": "OptiCart",
   "short_name": "OptiCart",
   "description": "AI-powered grocery shopping optimizer",
-  "start_url": "./screen1.html",
+  "start_url": "./intro.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

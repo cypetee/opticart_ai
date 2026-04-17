@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>OptiCart — Create Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006a35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OptiCart">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { manrope: ['Manrope', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: "#006a35", "primary-dim": "#005c2d", "primary-container": "#75f39c",
+            "on-primary": "#cdffd4", secondary: "#006946", "secondary-container": "#72fbbd",
+            "on-secondary-container": "#005e3e", surface: "#f6f6f9",
+            "surface-container-lowest": "#ffffff", "surface-container-low": "#f0f0f3",
+            "surface-container": "#e7e8eb", "surface-container-high": "#e1e2e6",
+            "surface-container-highest": "#dbdde0", "on-surface": "#2d2f31",
+            "on-surface-variant": "#5a5c5e", "outline-variant": "#acadaf",
+            tertiary: "#006576", "tertiary-container": "#00dcff",
+            "error-container": "#ffdad6", "on-error-container": "#410002",
+            error: "#b31b25",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { min-height: 100dvh; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+    .input-field:focus-within { border-color: #006a35; box-shadow: 0 0 0 3px rgba(0,106,53,0.1); }
+    .social-btn { transition: all 0.15s ease; }
+    .social-btn:active { transform: scale(0.96); }
+  </style>
+</head>
+<body class="bg-surface font-inter overflow-y-auto" style="min-height:100dvh">
+
+  <!-- Background blobs -->
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute -top-40 -right-24 w-96 h-96 bg-primary-container/25 rounded-full blur-[140px]"></div>
+    <div class="absolute bottom-0 -left-24 w-80 h-80 bg-secondary-container/20 rounded-full blur-[120px]"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="h-16 px-6 flex items-center justify-between">
+    <button onclick="window.history.back()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-95">
+      <span class="material-symbols-outlined text-on-surface-variant" style="font-size:22px">arrow_back</span>
+    </button>
+    <span class="font-manrope font-extrabold italic text-xl tracking-tight text-on-surface">OptiCart</span>
+    <div class="w-10"></div>
+  </header>
+
+  <!-- Main content -->
+  <main class="px-6 pb-12 max-w-md mx-auto">
+
+    <!-- Heading -->
+    <div class="mb-8 mt-2">
+      <h1 class="font-manrope font-extrabold text-[28px] leading-tight text-on-surface mb-2">Start Your<br>Fresh Journey.</h1>
+      <p class="text-sm text-on-surface-variant leading-relaxed">Join OptiCart for smarter, faster, and healthier grocery missions.</p>
+    </div>
+
+    <!-- Form -->
+    <form onsubmit="handleSignUp(event)" class="space-y-4">
+
+      <!-- Phone number -->
+      <div>
+        <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1.5 block">Phone Number</label>
+        <div class="input-field flex items-center gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 h-14 transition-all duration-200">
+          <!-- Flag + country code -->
+          <button type="button" class="flex items-center gap-1.5 flex-shrink-0 pr-3 border-r border-outline-variant/30" onclick="toggleCountry()">
+            <span class="text-lg">🇺🇸</span>
+            <span class="text-sm font-semibold text-on-surface">+1</span>
+            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:16px">expand_more</span>
+          </button>
+          <input id="phone" type="tel" placeholder="(000) 000-0000" autocomplete="tel"
+            class="flex-1 bg-transparent text-sm text-on-surface placeholder-on-surface-variant/50 outline-none min-w-0"
+            oninput="formatPhone(this)">
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1.5 block">Password</label>
+        <div class="input-field flex items-center gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 h-14 transition-all duration-200">
+          <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0" style="font-size:20px">lock</span>
+          <input id="password" type="password" placeholder="Min. 8 characters" autocomplete="new-password"
+            class="flex-1 bg-transparent text-sm text-on-surface placeholder-on-surface-variant/50 outline-none min-w-0">
+          <button type="button" onclick="togglePassword()" class="flex-shrink-0 text-on-surface-variant hover:text-on-surface transition-colors">
+            <span id="pw-eye" class="material-symbols-outlined" style="font-size:20px">visibility_off</span>
+          </button>
+        </div>
+        <div id="pw-strength" class="hidden mt-2 flex gap-1">
+          <div class="h-1 flex-1 rounded-full bg-surface-container" id="str1"></div>
+          <div class="h-1 flex-1 rounded-full bg-surface-container" id="str2"></div>
+          <div class="h-1 flex-1 rounded-full bg-surface-container" id="str3"></div>
+          <div class="h-1 flex-1 rounded-full bg-surface-container" id="str4"></div>
+        </div>
+      </div>
+
+      <!-- Terms checkbox -->
+      <label class="flex items-start gap-3 cursor-pointer select-none">
+        <div class="relative flex-shrink-0 mt-0.5">
+          <input id="terms" type="checkbox" class="sr-only peer">
+          <div class="w-5 h-5 rounded-md border-2 border-outline-variant/50 bg-surface-container-lowest peer-checked:bg-primary peer-checked:border-primary transition-all flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-primary hidden peer-checked:block" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>
+          </div>
+        </div>
+        <p class="text-xs text-on-surface-variant leading-relaxed">I agree to the <span class="text-primary font-semibold underline underline-offset-2">Terms of Service</span> and <span class="text-primary font-semibold underline underline-offset-2">Privacy Policy</span></p>
+      </label>
+
+      <!-- Create account button -->
+      <button type="submit" class="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-manrope font-bold text-base shadow-[0_8px_32px_rgba(0,106,53,0.3)] active:scale-[0.98] transition-all duration-200 mt-2">
+        Create Account
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.75 9h10.5M9.75 4.5L14.25 9l-4.5 4.5" stroke="#cdffd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+    </form>
+
+    <!-- Divider -->
+    <div class="flex items-center gap-3 my-6">
+      <div class="flex-1 h-px bg-outline-variant/30"></div>
+      <span class="text-xs font-semibold text-on-surface-variant tracking-widest">OR SIGN UP WITH</span>
+      <div class="flex-1 h-px bg-outline-variant/30"></div>
+    </div>
+
+    <!-- Social buttons -->
+    <div class="flex gap-3">
+      <!-- Google -->
+      <button onclick="socialSignUp('google')" class="social-btn flex-1 flex items-center justify-center gap-2 h-12 bg-surface-container-lowest border border-outline-variant/30 rounded-xl hover:border-primary/30 transition-all">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+          <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        <span class="text-sm font-semibold text-on-surface">Google</span>
+      </button>
+
+      <!-- Apple -->
+      <button onclick="socialSignUp('apple')" class="social-btn flex-1 flex items-center justify-center gap-2 h-12 bg-on-surface border border-on-surface rounded-xl hover:opacity-85 transition-all">
+        <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.173 9.545c-.013-1.557.714-2.74 2.184-3.607-.818-1.166-2.056-1.81-3.694-1.94-1.546-.127-3.232.9-3.851.9-.655 0-2.145-.862-3.328-.862C2.2 4.072 0 5.63 0 8.795c0 .913.168 1.854.503 2.825.449 1.283 2.069 4.43 3.757 4.378.125-.003.247-.018.366-.045.546-.128 1.125-.497 1.828-.497.686 0 1.236.362 1.843.494.126.028.252.043.38.043 1.697-.035 3.246-2.857 3.676-4.141a4.36 4.36 0 0 1-1.18-1.307ZM11.522 2.35C12.337 1.378 12.82.213 12.686 0 11.6.073 10.33.747 9.489 1.737c-.774.907-1.32 2.075-1.167 3.267 1.167.09 2.36-.6 3.2-1.654Z" fill="white"/>
+        </svg>
+        <span class="text-sm font-semibold text-white">Apple</span>
+      </button>
+
+      <!-- Facebook -->
+      <button onclick="socialSignUp('facebook')" class="social-btn flex-1 flex items-center justify-center gap-2 h-12 bg-[#1877F2] border border-[#1877F2] rounded-xl hover:opacity-85 transition-all">
+        <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 1H6.5C5.12 1 4 2.12 4 3.5V6H1v3h3v8h3V9h2.5L10 6H7V3.5c0-.28.22-.5.5-.5H9V1Z" fill="white"/>
+        </svg>
+        <span class="text-sm font-semibold text-white">Facebook</span>
+      </button>
+    </div>
+
+    <!-- Log in link -->
+    <p class="text-center text-sm text-on-surface-variant mt-6">
+      Already have an account?
+      <button onclick="window.location.href='missions.html'" class="text-primary font-semibold hover:underline ml-1">Log in</button>
+    </p>
+
+    <!-- Security badge -->
+    <div class="flex items-center justify-center gap-2 mt-8 pt-6 border-t border-outline-variant/20">
+      <span class="material-symbols-outlined text-on-surface-variant" style="font-size:16px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">lock</span>
+      <p class="text-xs font-semibold text-on-surface-variant tracking-widest uppercase">Secure Bank-Grade Encryption</p>
+    </div>
+
+  </main>
+
+  <script>
+    // Checkbox checked state visual sync
+    document.getElementById('terms').addEventListener('change', function() {
+      const box = this.nextElementSibling;
+      const check = box.querySelector('span');
+      if (this.checked) {
+        box.classList.add('bg-primary', 'border-primary');
+        check.classList.remove('hidden');
+      } else {
+        box.classList.remove('bg-primary', 'border-primary');
+        check.classList.add('hidden');
+      }
+    });
+
+    function togglePassword() {
+      const pw = document.getElementById('password');
+      const eye = document.getElementById('pw-eye');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        eye.textContent = 'visibility';
+      } else {
+        pw.type = 'password';
+        eye.textContent = 'visibility_off';
+      }
+    }
+
+    function formatPhone(input) {
+      let v = input.value.replace(/\D/g, '').slice(0, 10);
+      if (v.length >= 7) v = '(' + v.slice(0,3) + ') ' + v.slice(3,6) + '-' + v.slice(6);
+      else if (v.length >= 4) v = '(' + v.slice(0,3) + ') ' + v.slice(3);
+      else if (v.length >= 1) v = '(' + v;
+      input.value = v;
+
+      // Show password strength
+      const pw = document.getElementById('password');
+      updateStrength(pw.value);
+    }
+
+    document.getElementById('password').addEventListener('input', function() {
+      const bar = document.getElementById('pw-strength');
+      bar.classList.remove('hidden');
+      updateStrength(this.value);
+    });
+
+    function updateStrength(pw) {
+      const bars = ['str1','str2','str3','str4'].map(id => document.getElementById(id));
+      const len = pw.length;
+      let score = 0;
+      if (len >= 8) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+      const colors = ['bg-red-400','bg-orange-400','bg-yellow-400','bg-primary'];
+      bars.forEach((b, i) => {
+        b.className = 'h-1 flex-1 rounded-full ' + (i < score ? colors[score - 1] : 'bg-surface-container');
+      });
+    }
+
+    function toggleCountry() {
+      // Stub — could open a country picker sheet
+    }
+
+    function handleSignUp(e) {
+      e.preventDefault();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const terms = document.getElementById('terms').checked;
+
+      if (!phone) { showError('Please enter your phone number.'); return; }
+      if (password.length < 8) { showError('Password must be at least 8 characters.'); return; }
+      if (!terms) { showError('Please agree to the Terms of Service.'); return; }
+
+      // Store minimal signup state and proceed to onboarding
+      localStorage.setItem('opticart_signup', JSON.stringify({ phone, method: 'phone', ts: Date.now() }));
+      window.location.href = 'screen1.html';
+    }
+
+    function socialSignUp(provider) {
+      // Stub — store provider intent and proceed to onboarding
+      localStorage.setItem('opticart_signup', JSON.stringify({ method: provider, ts: Date.now() }));
+      window.location.href = 'screen1.html';
+    }
+
+    function showError(msg) {
+      let toast = document.getElementById('error-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'error-toast';
+        toast.className = 'fixed bottom-8 inset-x-6 max-w-md mx-auto bg-error-container text-on-error-container text-sm font-semibold rounded-xl px-4 py-3 shadow-lg z-50 text-center transition-all duration-300';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+    }
+  </script>
+
+  <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
+</body>
+</html>

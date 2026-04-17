@@ -1,5 +1,7 @@
 const CACHE = 'opticart-v4';
 const ASSETS = [
+  './intro.html',
+  './signup.html',
   './screen1.html',
   './screen2.html',
   './screen3.html',
