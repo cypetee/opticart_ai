@@ -122,7 +122,7 @@
 
       <!-- Image header -->
       <div class="relative h-56 overflow-hidden rounded-t-[28px]">
-        <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+        <img id="modal-img" src="" alt="" class="w-full h-full object-cover" referrerpolicy="no-referrer" crossorigin="anonymous">
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         <button onclick="closeModalBtn()" class="absolute top-4 right-4 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
           <span class="material-symbols-outlined text-white" style="font-size:20px">close</span>
@@ -203,6 +203,8 @@
           <div class="relative h-36 overflow-hidden bg-surface-container">
             <img src="${r.image}" alt="${r.name}"
               class="recipe-img w-full h-full object-cover"
+              referrerpolicy="no-referrer"
+              crossorigin="anonymous"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="hidden absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/50 items-center justify-center text-4xl">${r.emoji}</div>
             <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${CAT_CLASSES[r.category]}">${CAT_LABELS[r.category]}</div>
