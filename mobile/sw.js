@@ -1,4 +1,4 @@
-const CACHE = 'opticart-v3';
+const CACHE = 'opticart-v4';
 const ASSETS = [
   './screen1.html',
   './screen2.html',
@@ -14,6 +14,7 @@ const ASSETS = [
   './icons/icon.svg',
   './icons/icon-maskable.svg',
   './data/grocery.js',
+  './data/grocery.json',
   './js/storage.js',
   './js/ai-filter.js',
 ];

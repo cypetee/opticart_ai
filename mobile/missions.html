@@ -432,10 +432,12 @@
     }
 
     // ── Init ───────────────────────────────────────────────
-    renderMissingItems();
-    renderCart();
-    updateMission();
-    updateNavBadge();
+    window.GROCERY_DB_READY.then(function () {
+      renderMissingItems();
+      renderCart();
+      updateMission();
+      updateNavBadge();
+    });
   </script>
 
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>

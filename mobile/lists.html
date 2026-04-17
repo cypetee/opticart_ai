@@ -314,7 +314,7 @@
       loadSuggested();
     }
 
-    init();
+    window.GROCERY_DB_READY.then(init);
   </script>
 
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>

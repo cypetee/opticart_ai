@@ -283,7 +283,7 @@
       alert('Checkout coming soon! Your cart total is ' + document.getElementById('total').textContent);
     }
 
-    render();
+    window.GROCERY_DB_READY.then(render);
   </script>
 
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
