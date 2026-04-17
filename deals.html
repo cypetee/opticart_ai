@@ -261,19 +261,19 @@
         `${dealItems.length} deals available this week`;
     }
 
-    // Run as soon as DB is ready — with a 3s timeout fallback
-    function initDeals() {
-      if (window.GROCERY_DB_READY) {
-        const timeout = new Promise(r => setTimeout(r, 3000));
-        Promise.race([window.GROCERY_DB_READY, timeout]).then(loadDeals);
+    // Poll for GROCERY_DB — works regardless of SW or load order
+    (function tryLoad(n) {
+      if (window.GROCERY_DB && window.GROCERY_DB.items && window.GROCERY_DB.items.length) {
+        loadDeals();
+      } else if (n > 0) {
+        setTimeout(() => tryLoad(n - 1), 250);
       } else {
-        // grocery.js not loaded yet, try on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', () => {
-          setTimeout(loadDeals, 500);
-        });
+        document.getElementById('deals-row').innerHTML =
+          '<p class="text-sm text-on-surface-variant px-2 py-4">Could not load deals — please refresh the page.</p>';
+        document.getElementById('recipes-list').innerHTML = '';
+        document.getElementById('savings-summary').textContent = 'Refresh to try again';
       }
-    }
-    initDeals();
+    })(20); // up to 5 seconds
   </script>
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
 </body>
