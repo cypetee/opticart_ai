@@ -179,15 +179,6 @@
     </div>
   </div>
 
-  <script src="js/storage.js"></script>
-  <script>
-    // If onboarding already complete, go directly to missions
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof Storage !== 'undefined' && Storage.isOnboardingComplete && Storage.isOnboardingComplete()) {
-        window.location.replace('missions.html');
-      }
-    });
-  </script>
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
 </body>
 </html>
