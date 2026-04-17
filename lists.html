@@ -197,19 +197,36 @@
       document.getElementById('list-subtitle').textContent = `${today} · ${total} items`;
     }
 
+    function addToCart(itemId) {
+      const db = window.GROCERY_DB;
+      const item = db && db.items.find(i => i.id === itemId);
+      if (!item) return;
+      const cart = JSON.parse(localStorage.getItem('opticart_cart') || '[]');
+      const existing = cart.find(i => i.id === itemId);
+      if (existing) { existing.qty++; }
+      else { cart.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qty: 1 }); }
+      localStorage.setItem('opticart_cart', JSON.stringify(cart));
+      // Flash feedback on button
+      const btn = document.getElementById('cart-btn-' + itemId);
+      if (btn) {
+        btn.textContent = '✓';
+        btn.classList.add('bg-primary', 'text-on-primary');
+        setTimeout(() => { btn.textContent = '🛒'; btn.classList.remove('bg-primary', 'text-on-primary'); }, 1200);
+      }
+    }
+
     function listItemHTML(item, checked) {
-      const circleClass = checked
-        ? 'bg-primary border-primary'
-        : 'border-outline-variant';
+      const circleClass = checked ? 'bg-primary border-primary' : 'border-outline-variant';
       const checkIcon = checked
         ? `<span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24">check</span>`
         : '';
       const rowClass = checked ? 'item-checked' : '';
       return `
-        <div class="list-item ${rowClass} flex items-center gap-4 p-4" onclick="toggleItem(this,'${item.id}')">
-          <div class="w-6 h-6 rounded-full border-2 ${circleClass} flex items-center justify-center flex-shrink-0 check-circle-ui">${checkIcon}</div>
-          <span class="item-name flex-1 text-sm text-on-surface">${item.emoji} ${item.name}</span>
-          <span class="text-xs text-on-surface-variant">$${item.price.toFixed(2)}</span>
+        <div class="list-item ${rowClass} flex items-center gap-3 p-4">
+          <div class="w-6 h-6 rounded-full border-2 ${circleClass} flex items-center justify-center flex-shrink-0 check-circle-ui cursor-pointer" onclick="toggleItem(this.closest('.list-item'),'${item.id}')">${checkIcon}</div>
+          <span class="item-name flex-1 text-sm text-on-surface cursor-pointer" onclick="toggleItem(this.closest('.list-item'),'${item.id}')">${item.emoji} ${item.name}</span>
+          <span class="text-xs text-on-surface-variant mr-1">$${item.price.toFixed(2)}</span>
+          <button id="cart-btn-${item.id}" onclick="addToCart('${item.id}')" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-sm hover:bg-primary-container transition-all active:scale-90 flex-shrink-0" title="Add to cart">🛒</button>
         </div>`;
     }
 
