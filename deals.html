@@ -262,7 +262,7 @@
         `${dealItems.length} deals personalized for you · powered by AI`;
     }
 
-    loadDeals();
+    window.GROCERY_DB_READY.then(loadDeals);
   </script>
   <script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
 </body>
